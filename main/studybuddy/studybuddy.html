@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<link rel="stylesheet" media="all" href="styles.css"/>
+<audio id="audio_player"></audio>
+<nav id="left_menu">
+	<div id="left_menu_options">
+		<ul>
+			<input type="file" id="file" onchange="load_file()"></input> 
+            <button onclick="">Menu Option 1</button>
+			<button onclick="">Menu Option 2</button>
+			<button onclick="">Menu Option 3</button>
+			<button onclick="">Menu Option 4</button>
+			<input id="vol_slider" type="range" min="1" max="100" value="50" onchange=
+		"change_volume(this.value)"></input>
+		</ul>
+	</div>
+</nav>
+
+<canvas id="image_canvas"></canvas>
+<canvas id="seek_canvas"></canvas>
+<canvas id="seek_overlay_canvas"></canvas>
+
+<textarea disabled  id="annotation_stream"></textarea>
+<textarea id="annotation_input"></textarea>
+
+<script src="utils.js"></script>
+<script src="events.js"></script>
+<script src="studybuddy.js"></script>
+</html>

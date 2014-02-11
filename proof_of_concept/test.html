@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<!-- This is the title of the tab/webpage -->
+<head> <title>Study Buddy demo</title></head>
+	<!-- This is the header at the top, just some text -->
+	<div style="margin-left:auto;
+		margin-right:auto;
+		width:16%;"><b><i>"Study Buddy"</b></i><b>demo</b></div>
+	<meta charset="UTF-8">
+	<!-- Shows the title for the current slide -->
+	<center>
+		<textarea disabled cols="35" rows="1" id="slide_title" style="resize:none;" type="text/plain"></textarea>
+	</center>
+<body style="background-color:#999999;">
+
+<!-- This is the mp3 file I loaded up as a sample; if we choose to use the web -->
+<!-- platform this will probably be manipulated in js using the Google Drive api -->
+<audio src="demoaud.mp3" source id="Audio" preload="auto"></audio>
+<center>
+	<!-- The big "screen" which holds the images -->
+	<canvas id="drawingCanvas"></canvas>
+	
+	<!-- The tracker bar which shows how far the recording has been played -->
+	<canvas id="trackerCanvas" height="30"></canvas>
+	
+	<!-- This is something I was playing around with and don't quite want to -->
+	<!-- remove yet -->
+	<canvas id="trackerProgressCanvas" height="30" style="display:none;"></canvas>
+</center>
+<div>
+	<!-- Pause/Play button... on click, calls the 'play_pause()' function -->
+	<button id="pause_play" onclick="play_pause()">Pause/Play</button>
+	
+	<!-- Starts recording from the beginning -->
+	<button onclick="seekPlayer(0)">Restart</button>
+	
+	<!-- Volume slider -->
+	<input id="vol_slider" type="range" min="1" max="100" value="50" onchange=
+		"change_volume(this.value)">Volume</input>
+		
+	<textarea disabled cols="18" rows="1" id="current_time" style="resize:none;" type="text/plain"></textarea>
+		
+	<!-- Opens a recording (Not yet functional) -->
+	<button onclick="" style="float:right;">Open recording</button>
+</div>
+
+<!-- Textareas div, holds the bottom 2 textareas (for info and annotations) -->
+<div>
+	<!-- Annotations textarea; editable -->
+	<textarea cols="70" rows="5" id="annotations" style="resize:none;" type="text/plain"></textarea>
+	
+	<!-- Info textarea; might later show what files are playing, etc -->
+	<textarea disabled cols="35" rows="4" id="current_info" style="float:right;resize:none;" type="text/plain"></textarea>
+</div>
+</body>
+
+<!--  This is a really messy, really bad chunk of code below... ideally, it -->
+<!--  would be broken up into chunks that follow web programming standards  -->
+<!--  but I was more focused on getting something presentable instead of proper -->
+
+<script>
+// This is the json I'm using as input... if we were to use the web as our 
+// platform this would be sourced to a different, separate file
+var recording = {
+	"Events": [
+	{
+		"time":2,
+		"duration":50,
+		"image":"demo1.jpg",
+		"annotation":"This is an annotation for the first image of the demo, demo1.jpg"
+	},
+	{
+		"time":60,
+		"duration":120,
+		"image":"demo2.jpg",
+		"annotation":"This is an annotation for the second image of the demo, demo2.jpg"
+	},
+	{
+		"time":180,
+		"duration":60,
+		"image":"demo3.jpg",
+		"annotation":"This is an annotation for the third image of the demo, demo3.jpg"
+	}	
+	]
+}
+
+var current_image = -1;
+
+console.log(recording.Events[0].image);
+
+// Canvas for the tracking bar (Canvas is the HTML element)
+var tracking_canvas = document.getElementById("trackerCanvas");
+// Context for the tracking bar (Contexts are what get manipulated and drawn to)
+var tracking_context = tracking_canvas.getContext("2d");
+
+// Canvas for the big screen with the pictures
+var drawing_canvas = document.getElementById("drawingCanvas");
+var drawing_context = drawing_canvas.getContext("2d");
+
+// Not currently used canvas
+var progress_canvas = document.getElementById("trackerProgressCanvas");
+var progress_context = progress_canvas.getContext("2d");
+
+// The 2 textareas below the player
+var current_info = document.getElementById("current_info");
+var annotations = document.getElementById("annotations");
+var current_time = document.getElementById("current_time");
+var slide_title = document.getElementById("slide_title");
+annotations.value = "This is where the annotations can go; we can either let the user add them or just read from here; they can also be added onto the main screen above";
+
+// Some initialization
+initCanvases();
+update_info();
+
+// This gets called:
+//		a) On startup (a few lines above)
+// 		b) When the window is resized (everything needs to be rescaled)
+function initCanvases(){
+	var w = window.innerWidth;
+	var h = window.innerHeight;
+
+	tracking_canvas.width = w - 60;
+	tracking_canvas.addEventListener("click", tracking_bar_onclick, false);
+
+	drawing_canvas.height = h * 3/4;
+	drawing_canvas.width = w - 60;
+	
+	// Unused
+	progress_canvas.width = drawing_canvas.width;
+
+	// Drawing the tracking box, which we use to seek through the recording
+	// Sets the fillstyle of the canvas we're using to a light gray
+	tracking_context.fillStyle="#555555"; 
+	//	Fill the entire canvas with the above fill color
+	tracking_context.fillRect(0, 0, 20000, 20000); 
+	
+	// Drawing the tracking box, which we use to seek through the recording
+	// Sets the fillstyle of the canvas we're using to a light gray
+	drawing_context.fillStyle="#000000"; 
+	//	Fill the entire canvas with the above fill color
+	drawing_context.fillRect(0, 0, 20000, 20000); 
+	
+	// Unused
+	progress_context.fillStyle="#111111";
+	progress_context.fillRect(0, 0, 20000, 20000);
+	progress_canvas.x = tracking_canvas.x;
+	progress_canvas.y = tracking_canvas.y;
+
+	// Drawing the inner "black box"
+	// Setting fill color to black
+	tracking_context.fillStyle="#222222";
+	tracking_context.fillRect(0, 0, w - 60, 5);		// Fill the top part
+	tracking_context.fillRect(0, tracking_canvas.height - 5, w - 60, 5);	// Bottom part
+	tracking_context.fillRect(0, 0, 5, w - 60);		// Left part
+	tracking_context.fillRect(w - 65, 0, 5, 70);	// Right part
+}
+
+// Audio is our audio player that's playing our .mp3
+var audio = document.getElementById("Audio");
+
+// This listener is used to:
+//		Update the tracking bar
+// 		Determine when pictures are going to be shown
+//		Other time stuff related to the recording's time
+audio.addEventListener('timeupdate', updatePlayer, false);
+
+// This listener tells us when the window is resized, and calls the initCanvases()
+// function, which handles all of the redrawing and scaling relative to the window 
+// size
+window.addEventListener('resize', function(event){
+	console.log("Main window was resized");
+	initCanvases();
+});
+
+// This is the listener function called by the eventlistener
+// added to Audio above
+function updatePlayer(){
+	//console.log("Duration changed...");
+	var time = audio.currentTime;
+	
+	// Determine if the current image is past its duration; if it is (and 
+	// there are any images left), go to the next image
+	console.log(current_image);
+	
+	var current = recording.Events[current_image];
+	if(current_image == -1){
+		if(recording.Events[0].time <= time && recording.Events[0].time + recording.Events[0].duration > time){
+			current_image = 0;
+			current = recording.Events[0];
+			slide_title.value = current.image;
+			annotations.value = current.annotation;
+		}
+	}else if(current.time + current.duration < time){
+		if(current_image + 1 >= recording.Events.length){
+			current_image = -1;
+			slide_title.value = "";
+			annotations.value = "";
+		}else{
+			current_image++;
+			annotations.value = recording.Events[current_image].annotation;
+			slide_title.value = recording.Events[current_image].image;
+			console.log("switching");
+		}
+	}
+	
+	var current = recording.Events[current_image];
+	if(current_image != -1){
+		var image = new Image();
+		image.src = current.image;
+		image.onload = function(){
+			drawing_context.drawImage(image, 0, 0);
+		}
+	} else {
+		drawing_context.fillStyle="#000000"; 
+		//	Fill the entire canvas with the above fill color
+		drawing_context.fillRect(0, 0, 20000, 20000); 
+	}
+	
+	annotations.value = recording.Events[current_image].annotation;
+	slide_title.value = recording.Events[current_image].image;
+	
+	// Super messy and overly verbose code that formats the timestamp,
+	// can fix later
+	var time1 = (Math.floor(time) % 60);
+	time /= 60;
+	var time2 = (Math.floor(time) % 60);
+	time /= 60
+	var time3 = (Math.floor(time) % 60);
+	var fintime;
+	if(time3 < 10){
+		fintime = "0" + time3 + ":";
+	}else{
+		fintime = time3 + ":";
+	}
+	if(time2 < 10){
+		fintime += "0" + time2 + ":";
+	}else{
+		fintime += time2 + ":";
+	}
+	if(time1 < 10){
+		fintime += "0"+time1;
+	}else{
+		fintime += time1;
+	}
+	
+	var totaltime = "";
+	time = audio.duration;
+	time1 = (Math.floor(time) % 60);
+	time /= 60;
+	time2 = (Math.floor(time) % 60);
+	time /= 60
+	time3 = (Math.floor(time) % 60);
+	if(time3 < 10){
+		totaltime = "0" + time3 + ":";
+	}else{
+		totaltime = time3 + ":";
+	}
+	if(time2 < 10){
+		totaltime += "0" + time2 + ":";
+	}else{
+		totaltime += time2 + ":";
+	}
+	if(time1 < 10){
+		totaltime += "0"+time1;
+	}else{
+		totaltime += time1;
+	}
+	current_time.value = fintime + " / " + totaltime;
+	// end timestamp code
+	
+	tracking_context.fillStyle="#00FF00";
+	tracking_context.fillRect(5, 5, (audio.currentTime / audio.duration) *
+		(tracking_canvas.width - 10), tracking_canvas.height - 10);
+}
+
+// Seeks the audio player based on a place on the tracking bar
+function seekPlayer(x){
+	// Skip the first 5px which are the border
+	x += 5;
+	
+	// Set the current time of the audio to the place where the user clicked
+	audio.currentTime = audio.duration * (x / tracking_canvas.width);
+	current_image = -1;
+	for(i = 0; i < recording.Events.length; i++){
+		if(audio.currentTime > recording.Events[i].time && audio.currentTime < recording.Events[i].time + recording.Events[i].duration){
+			current_image = i;
+			i = recording.Events[i].length + 1;
+		}
+	}
+	
+	// Clear the background of the tracking bar
+	tracking_context.fillStyle="#555555";
+	tracking_context.fillRect(5, 5, tracking_canvas.width - 10,
+		tracking_canvas.height - 10);
+		
+	// Set the tracking bar's progress to the proper place
+	tracking_context.fillStyle="#00FF00";
+	tracking_context.fillRect(5, 5, ((audio.currentTime / audio.duration) *
+		(tracking_canvas.width-10)), tracking_canvas.height - 10);
+}
+
+// Called from the [Pause/Play] button; starts playing the recording if it was 
+// paused and vice versa
+function play_pause(){
+	if(audio.paused == true){
+		audio.play();
+	}else{
+		audio.pause();
+	}
+}
+
+// Called when the files change... not used yet
+function update_info(){
+	var recording_name = "Demo";
+	var audio_name = "NOT_IMPLEMENTED";
+	var image_name = "NOT_IMPLEMENTED";
+	current_info.value="Debug info:\nRecording title: " + recording_name + "\nAudio name: " + audio_name + "\nImage Name: " + image_name;
+}
+
+// Adjusts volume of playback based on where the slider bar is
+function change_volume(slider_vol){
+	audio.volume = slider_vol / 100;
+	console.log(audio.volume);
+}
+
+// This function gets called whenever the user clicks on our tracking bar in general
+// e is a ClickEvent (or something similar)
+function tracking_bar_onclick(e){
+	// These will have the x and y coordinates for the click, 
+	// We care only about the x position for seeking through
+	// The recording
+	var x;
+	var y;
+	
+	// x = (the x coordinate of the click relative to the webpage) - (position of the canvas on the webpage) = position of the click relative to the canvas
+	x = e.pageX - tracking_canvas.offsetLeft;
+	// Ditto for y
+	y = e.pageY - tracking_canvas.offsetTop;
+	console.log("Clicked (" +x + ", " + y + ") in the tracking bar");
+	
+	// Send the x coordinate relative to the tracking bar to the seek function, 
+	// where the place of the recording is adjusted
+	seekPlayer(x);
+}
+</script>
+</html>
