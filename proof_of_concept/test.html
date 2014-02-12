@@ -63,20 +63,20 @@
 var recording = {
 	"Events": [
 	{
-		"time":2,
-		"duration":50,
+		"time":1,
+		"duration":120,
 		"image":"demo1.jpg",
 		"annotation":"This is an annotation for the first image of the demo, demo1.jpg"
 	},
 	{
-		"time":60,
+		"time":180,
 		"duration":120,
 		"image":"demo2.jpg",
 		"annotation":"This is an annotation for the second image of the demo, demo2.jpg"
 	},
 	{
-		"time":180,
-		"duration":60,
+		"time":360,
+		"duration":120,
 		"image":"demo3.jpg",
 		"annotation":"This is an annotation for the third image of the demo, demo3.jpg"
 	}	
@@ -195,6 +195,7 @@ function updatePlayer(){
 			slide_title.value = "";
 			annotations.value = "";
 		}else{
+			recording.Events[current_image].annotation = annotations.value;
 			current_image++;
 			annotations.value = recording.Events[current_image].annotation;
 			slide_title.value = recording.Events[current_image].image;
@@ -214,57 +215,34 @@ function updatePlayer(){
 		//	Fill the entire canvas with the above fill color
 		drawing_context.fillRect(0, 0, 20000, 20000); 
 	}
+	if(recording.Events[current_image] != undefined){	
+		//annotations.value = recording.Events[current_image].annotation;
+		slide_title.value = recording.Events[current_image].image;
+	}
+	//new timestamp code
+	var numhours = Math.floor(time / 3600);
+	var numminutes = Math.floor((time % 3600) / 60);
+	var numseconds = Math.floor((time % 3600) % 60);
+	if(numhours < 10)
+		numhours = "0" + numhours;
+	if(numminutes < 10)
+		numminutes = "0" + numminutes;
+	if(numseconds < 10)
+		numseconds = "0" + numseconds;
 	
-	annotations.value = recording.Events[current_image].annotation;
-	slide_title.value = recording.Events[current_image].image;
+	var actualTime = numhours + ":" + numminutes + ":" + numseconds;
 	
-	// Super messy and overly verbose code that formats the timestamp,
-	// can fix later
-	var time1 = (Math.floor(time) % 60);
-	time /= 60;
-	var time2 = (Math.floor(time) % 60);
-	time /= 60
-	var time3 = (Math.floor(time) % 60);
-	var fintime;
-	if(time3 < 10){
-		fintime = "0" + time3 + ":";
-	}else{
-		fintime = time3 + ":";
-	}
-	if(time2 < 10){
-		fintime += "0" + time2 + ":";
-	}else{
-		fintime += time2 + ":";
-	}
-	if(time1 < 10){
-		fintime += "0"+time1;
-	}else{
-		fintime += time1;
-	}
-	
-	var totaltime = "";
-	time = audio.duration;
-	time1 = (Math.floor(time) % 60);
-	time /= 60;
-	time2 = (Math.floor(time) % 60);
-	time /= 60
-	time3 = (Math.floor(time) % 60);
-	if(time3 < 10){
-		totaltime = "0" + time3 + ":";
-	}else{
-		totaltime = time3 + ":";
-	}
-	if(time2 < 10){
-		totaltime += "0" + time2 + ":";
-	}else{
-		totaltime += time2 + ":";
-	}
-	if(time1 < 10){
-		totaltime += "0"+time1;
-	}else{
-		totaltime += time1;
-	}
-	current_time.value = fintime + " / " + totaltime;
+	numhours = Math.floor(audio.duration / 3600);
+	numminutes = Math.floor((audio.duration % 3600) / 60);
+	numseconds = Math.floor((audio.duration % 3600) % 60);
+	if(numhours < 10)
+		numhours = "0" + numhours;
+	if(numminutes < 10)
+		numminutes = "0" + numminutes;
+	if(numseconds < 10)
+		numseconds = "0" + numseconds;
+	var totalTime = numhours + ":" + numminutes + ":" + numseconds;
+	current_time.value = actualTime + " / " + totalTime;
 	// end timestamp code
 	
 	tracking_context.fillStyle="#00FF00";
@@ -275,14 +253,17 @@ function updatePlayer(){
 // Seeks the audio player based on a place on the tracking bar
 function seekPlayer(x){
 	// Skip the first 5px which are the border
-	x += 5;
-	
+	//x += 5;
+	if (current_image != -1){
+		recording.Events[current_image].annotation = annotations.value;
+	}
 	// Set the current time of the audio to the place where the user clicked
 	audio.currentTime = audio.duration * (x / tracking_canvas.width);
-	current_image = -1;
+	//current_image = -1;
 	for(i = 0; i < recording.Events.length; i++){
 		if(audio.currentTime > recording.Events[i].time && audio.currentTime < recording.Events[i].time + recording.Events[i].duration){
 			current_image = i;
+			annotations.value = recording.Events[i].annotation;
 			i = recording.Events[i].length + 1;
 		}
 	}
