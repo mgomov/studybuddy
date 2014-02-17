@@ -59,6 +59,7 @@ function seek_calculate(x){
 	}
 	x -= 10;
 	time = (x / (seek_canvas.width - 15)) * audio.duration;
+	console.log(time);
 	return time;
 }
 
