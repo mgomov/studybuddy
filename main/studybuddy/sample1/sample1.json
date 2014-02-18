@@ -4,21 +4,21 @@
 	"notes":"",
 	"Events": [
 	{
-		"time":2,
-		"duration":50,
-		"image":"sample1.jpg",
+		"time":0,
+		"duration":5,
+		"image":"demo1.jpg",
 		"annotation":"This is an annotation for the first image of the demo, demo1.jpg"
 	},
 	{
-		"time":60,
-		"duration":120,
-		"image":"sample2.jpg",
+		"time":15,
+		"duration":5,
+		"image":"demo2.jpg",
 		"annotation":"This is an annotation for the second image of the demo, demo2.jpg"
 	},
 	{
-		"time":180,
-		"duration":60,
-		"image":"sample3.jpg",
+		"time":25,
+		"duration":5,
+		"image":"demo3.jpg",
 		"annotation":"This is an annotation for the third image of the demo, demo3.jpg"
 	}	
 	]
