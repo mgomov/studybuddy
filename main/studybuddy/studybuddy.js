@@ -2,11 +2,16 @@ var w = window.innerWidth;
 var h = window.innerHeight;
 
 var recording;
+var recording_file;
+var current_event;
 
 var audio = document.getElementById("audio_player");
 
 var image_canvas = document.getElementById("image_canvas");
 var image_context = image_canvas.getContext("2d");
+var main_image = document.getElementById("main_image");
+
+var changed = false;
 
 var seek_canvas = document.getElementById("seek_canvas");
 var seek_context = seek_canvas.getContext("2d");
@@ -38,19 +43,6 @@ image_canvas.addEventListener('click', function(event) {
 	}
 }, false);
 
-// A few possible things based on selected files:
-//		Open a recording file
-// 			It's parsed, opened and loaded ready for use
-//		Open an audio file
-//			Starts a fresh session, generates a recording file
-//		Open multiple files
-//			Attempt to merge, bring to a screen where the user can tune
-//			the merge
-function load_file(){
-	var file = document.getElementById("file");
-	console.log(file.files[0]);
-}
-
 function seek_calculate(x){
 	var time;
 	x -= seek_canvas.relativeX;
@@ -62,11 +54,16 @@ function seek_calculate(x){
 	return time;
 }
 
+function changed(val){
+	console.log("Changed");
+	console.log(val.value);
+}
+
 function init(){
 	w = window.innerWidth;
 	h = window.innerHeight;
 
-	image_canvas.width = w - 400;
+	image_canvas.width = w;
 	image_canvas.height = h;
 
 	seek_canvas.width = image_canvas.width * (4/5);
@@ -75,16 +72,16 @@ function init(){
 	seek_overlay_canvas.width = seek_canvas.width;
 	seek_overlay_canvas.height = seek_canvas.height;
 
-	annotation_stream.style.width = w - image_canvas.width - 4 + "px";
+	annotation_stream.style.width = w - (5/6) * w+ "px";
 	annotation_stream.style.height = h - 100 + "px";
 
 	// sample annotation stream data display
 	for(var i = 0; i < 100; i++){
 		annotation_stream.value += "\n\n(00:00:00)\n" + '\u2192' + "This is an annotation at the time 00:00:00";
-	}
+	} 
 	// end sample data display
 
-	annotation_input.style.width = w - image_canvas.width - 6 + "px";
+	annotation_input.style.width = annotation_stream.style.width;
 	annotation_input.style.height = "90px";
 
 	seek_canvas.relativeX = image_canvas.width * (1/10);
@@ -95,6 +92,36 @@ init();
 render_main_screen();
 
 setInterval(render_main_screen, 20);
+
+// A few possible things based on selected files:
+//		Open a recording file
+// 			It's parsed, opened and loaded ready for use
+//		Open an audio file
+//			Starts a fresh session, generates a recording file
+//		Open multiple files
+//			Attempt to merge, bring to a screen where the user can tune
+//			the merge
+
+function load_file(file){
+	var reader = new FileReader();
+	var result;
+	reader.onload = readSuccess;                                            
+    function readSuccess(evt) { 
+		result = evt.target.result;
+		parse_file(result);
+    };
+	recording_file = file.files[0];
+	reader.readAsText(file.files[0]);
+}
+
+// Need to get a folder, I guess
+function parse_file(result){
+	console.log(recording_file);
+	var jsonData = JSON.parse(result);
+	recording = jsonData;
+	audio.src = "sample1/" + recording.audio;
+	current_event = -1;
+}
 
 function render_main_screen(){
 	
@@ -140,7 +167,6 @@ function draw_third_layer(){
 		roundRect(seek_overlay_context, 5, 5, (seek_canvas.width - 10) * 
 		(audio.currentTime / audio.duration) , seek_canvas.height - 10, 15, true, true);
 	}
-	
 }
 
 // Tracker layer
@@ -169,6 +195,28 @@ function draw_first_layer(){
 	
 	image_context.fillStyle = gradient;
 	image_context.fillRect(0, 0, w, h);
+	audio.volume = 0;
+	if(recording != undefined){
+		current_event = update_event(current_event, recording.Events, audio.currentTime);
+		if(current_event == -1 || current_event == -2 || current_event == -3){ 
+			console.log("Not in recording yet... " + current_event);
+			return;
+		}
+		
+		console.log(current_event + " " + audio.currentTime+ " " + recording.Events[current_event].time +" " +(recording.Events[current_event].time + recording.Events[current_event].duration));
+		if(changed){
+			changed = false;
+			var an_image = new Image();	
+			an_image.onload=function(){
+				main_image = an_image;
+			}
+			an_image.src = "sample1/"+ recording.Events[current_event].image;
+		}
+	//	image_canvas.width - (image_canvas.width * (image_canvas.width / main_image.width))
+		var gap = (image_canvas.width - (image_canvas.width * (image_canvas.width / main_image.width))) / 2;
+		image_context.drawImage(main_image, gap, 0, (image_canvas.width * (image_canvas.width / main_image.width)), image_canvas.height);
+		console.log(image_canvas.width / main_image.width);
+	}
 }
 
 window.addEventListener('resize', function(event){
@@ -177,3 +225,39 @@ window.addEventListener('resize', function(event){
 	seek_overlay_context.fillRect(0, 0, 2000, 2000);
 	init();
 });
+ 
+// Change annotation mode
+function change_annotation_mode(){
+	var check = document.getElementById("annotation_selection");
+	var value = check.checked;
+	console.log(value);
+	if(value){
+		image_canvas.width = w;
+		image_canvas.height = h;
+	
+		seek_canvas.width = image_canvas.width * (4/5);
+		seek_canvas.height = 40;
+
+		seek_overlay_canvas.width = seek_canvas.width;
+		seek_overlay_canvas.height = seek_canvas.height;
+
+		annotation_stream.style.width = w - (5/6) * w+ "px";
+		annotation_stream.style.height = h - 100 + "px";
+		
+		annotation_input.style.width = annotation_stream.style.width;
+		annotation_input.style.height = "90px";	
+	} else { 
+		image_canvas.width = w - 400;
+		annotation_stream.style.width = w - image_canvas.width - 4 + "px";
+		annotation_stream.style.height = h - 100 + "px";
+		annotation_stream.style.width = w - (5/6) * w+ "px";
+		annotation_stream.style.height = h - 100 + "px";
+		annotation_input.style.width = w - image_canvas.width - 6 + "px";
+		annotation_input.style.height = "90px"	
+		seek_canvas.width = image_canvas.width * (4/5);
+		seek_canvas.height = 40;
+		seek_overlay_canvas.width = seek_canvas.width;
+		seek_overlay_canvas.height = seek_canvas.height;
+		
+	}
+}

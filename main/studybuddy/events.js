@@ -1,24 +1,26 @@
 
 // -1 is before the first annotation
 // -2 is after the last annotation
-function next_image(current_event, events, current_time){
-	if(events[events.length - 1].time < current_time){
+function update_event(current_event, events, current_time){
+	if(events[events.length - 1].time + events[events.length - 1].duration < current_time){
 		return -2;
+		changed = true;
 	}
 	
-	if(events[0].time < current_time){
+	if(events[0].time > current_time){
 		return -1;
+		changed = true;
 	}
 	
-	if(current_event == -1 && events[0].time >= current_time){
-		return 0;
-	}
-	
-	for(var i = 1; i < events.length; i++){
-		if(events[i].time >= current_time && events[i].time + events[i].duration > current_time){
+	for(var i = 0; i < events.length; i++){
+		if(events[i].time <= current_time && events[i].time + events[i].duration >= current_time){
+			if(i != current_event){
+				changed = true;
+			}
 			return i;
 		}
 	}
+	return -3;
 }
 
 // TODO
