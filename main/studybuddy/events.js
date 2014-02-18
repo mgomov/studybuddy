@@ -4,18 +4,18 @@
 function update_event(current_event, events, current_time){
 	if(events[events.length - 1].time + events[events.length - 1].duration < current_time){
 		return -2;
-		changed = true;
+		event_switched = true;
 	}
 	
 	if(events[0].time > current_time){
 		return -1;
-		changed = true;
+		event_switched = true;
 	}
 	
 	for(var i = 0; i < events.length; i++){
 		if(events[i].time <= current_time && events[i].time + events[i].duration >= current_time){
 			if(i != current_event){
-				changed = true;
+				event_switched = true;
 			}
 			return i;
 		}

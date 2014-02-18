@@ -1,29 +1,45 @@
+// Width and height, for general use
 var w = window.innerWidth;
 var h = window.innerHeight;
 
+// The current recording file's parsed JSON
 var recording;
+// Recording file's name
 var recording_file;
+// Current event (integer, index for recording.Events)
 var current_event;
 
+// Audio player
 var audio = document.getElementById("audio_player");
 
+// The main image canvas
 var image_canvas = document.getElementById("image_canvas");
 var image_context = image_canvas.getContext("2d");
+
+// Image up for display currently
 var main_image = document.getElementById("main_image");
 
-var changed = false;
+// Convenience vars for switching between events... 
+// Signals that an event was switched and some things need to happen
+var event_switched = false;
+// Signals that the image was fully loaded, done to prevent 'flashbacks' of
+// previous image
+var image_updated = false;
 
+// The seek bar's canvas
 var seek_canvas = document.getElementById("seek_canvas");
 var seek_context = seek_canvas.getContext("2d");
 
+// The seek bar's overlay canvas
 var seek_overlay_canvas = document.getElementById("seek_overlay_canvas");
 var seek_overlay_context = seek_overlay_canvas.getContext("2d");
 
-var bottom_menu = document.getElementById("bottom_menu");
-
+// Annotation stream
 var annotation_stream = document.getElementById("annotation_stream");
+// Input box
 var annotation_input = document.getElementById("annotation_input");
 
+// Click listener for translating coordinates and passing them to what handles them 
 image_canvas.addEventListener('click', function(event) {
 	var x = event.pageX - image_canvas.offsetLeft;
 	var y = event.pageY - image_canvas.offsetTop;
@@ -43,6 +59,7 @@ image_canvas.addEventListener('click', function(event) {
 	}
 }, false);
 
+// Calculates time to seek to based on x position of click on the seek bar
 function seek_calculate(x){
 	var time;
 	x -= seek_canvas.relativeX;
@@ -54,11 +71,32 @@ function seek_calculate(x){
 	return time;
 }
 
-function changed(val){
-	console.log("Changed");
-	console.log(val.value);
+// The input box's event handler (so far, adds annotations to the text box)
+function changed_input(val){
+	if(event.charCode == 13) // if enter is pressed
+	{	if(val.value.length > 2) // if annotation is longer than 2
+		{
+			var timeOfAnnotation = "";
+			timeOfAnnotation += Math.floor(audio.currentTime / 3600);//hour
+			timeOfAnnotation += ":";
+			if (Math.floor((audio.currentTime % 3600) / 60) < 10)
+				timeOfAnnotation += 0;
+			timeOfAnnotation += Math.floor((audio.currentTime % 3600) / 60);//minute
+			timeOfAnnotation += ":";
+			if (Math.floor((audio.currentTime % 3600) % 60) < 10)
+				timeOfAnnotation += 0;
+			timeOfAnnotation += Math.floor((audio.currentTime % 3600) % 60);//second
+			timeOfAnnotation += " ";
+			annotation_stream.value += timeOfAnnotation;
+			annotation_stream.value += val.value;
+			annotation_stream.value += "\n\n";
+			recording.Events[current_event].annotation = annotation_stream.value;
+		}
+		annotation_input.value = "";
+	}
 }
 
+// Init function; called when window is resized as well as on startup
 function init(){
 	w = window.innerWidth;
 	h = window.innerHeight;
@@ -85,6 +123,7 @@ function init(){
 init();
 render_main_screen();
 
+// Adds render of the main canvas to a loop
 setInterval(render_main_screen, 20);
 
 // A few possible things based on selected files:
@@ -96,10 +135,14 @@ setInterval(render_main_screen, 20);
 //			Attempt to merge, bring to a screen where the user can tune
 //			the merge
 
+// Loads a file and parses its JSON into recording
 function load_file(file){
+	// This is a pretty arbitrary process for loading a file in 
 	var reader = new FileReader();
 	var result;
-	reader.onload = readSuccess;                                            
+	
+	// Onload for asynchronous functions (e.g. loading a file)
+	reader.onload = readSuccess;   
     function readSuccess(evt) { 
 		result = evt.target.result;
 		parse_file(result);
@@ -108,7 +151,7 @@ function load_file(file){
 	reader.readAsText(file.files[0]);
 }
 
-// Need to get a folder, I guess
+// Does the JSON parsing and puts it into the recording
 function parse_file(result){
 	console.log(recording_file);
 	var jsonData = JSON.parse(result);
@@ -117,6 +160,7 @@ function parse_file(result){
 	current_event = -1;
 }
 
+// Main render function for the application
 function render_main_screen(){
 	
 	// Do drawing of the seek bar
@@ -144,14 +188,16 @@ function draw_third_layer(){
 	seek_overlay_context.clearRect(0, 0, w, h);
 	
 	var gradient = seek_overlay_context.createLinearGradient(0, 0, w * (1.5), h * (1.5));
-	//var gradient = image_context.createRadialGradient(-1000, h / 2, 100, w, h/2, 10000);
 	
 	gradient.addColorStop(0, "#B2FFB2");
 	gradient.addColorStop(1, "#00ff00");
 	
 	image_context.fillStyle = gradient;
 	
-	seek_overlay_context.fillStyle =gradient;
+	seek_overlay_context.fillStyle = gradient;
+	
+	// Tried to clean up the parts of the seek bar when the seek bar is 
+	// very small... still needs tuning but low priority
 	if((seek_canvas.width - 10) * (audio.currentTime / audio.duration) == 0){
 		// do nothing, since no progress
 	}else if((seek_canvas.width - 10) * (audio.currentTime / audio.duration) < 25){
@@ -167,10 +213,17 @@ function draw_third_layer(){
 function draw_second_layer(){
 	var w = seek_canvas.width;
 	var h = seek_canvas.height;
+	
+	// Clear the context for drawing
 	seek_context.clearRect(0, 0, w, h);
 	
+	// Arbitrary color 
 	seek_context.fillStyle ="#7f7f7f";
+	
+	// Draw the seek bar's border
 	roundRect(seek_context, 0, 0, seek_canvas.width, seek_canvas.height, 20, true, true);
+	
+	// Draw the actual seek bar
 	seek_context.fillStyle ="#0f0f0f";
 	roundRect(seek_context, 5, 5, seek_canvas.width - 10, seek_canvas.height - 10, 15, true, true);
 }
@@ -181,8 +234,8 @@ function draw_first_layer(){
 	var h = image_canvas.height;
 	image_context.clearRect(0, 0, w, h);
 	
+	// Some styling for the main image canvas, just a gradient
 	var gradient = image_context.createLinearGradient(0, 0, w * (1.5), h * (1.5));
-	//var gradient = image_context.createRadialGradient(-1000, h / 2, 100, w, h/2, 10000);
 	
 	gradient.addColorStop(0, "black");
 	gradient.addColorStop(1, "gray");
@@ -191,26 +244,40 @@ function draw_first_layer(){
 	image_context.fillRect(0, 0, w, h);
 	audio.volume = 0;
 	
+	// Handling drawing of images as well as advancing events
 	if(recording != undefined){
+		// Updates the current event if necessary
 		current_event = update_event(current_event, recording.Events, audio.currentTime);
+		
+		// -1 means that we're before the recording, -2 means we're after 
+		// the recording and -3 means we're in between events (dead space)
 		if(current_event == -1 || current_event == -2 || current_event == -3){ 
+			image_updated = false;
 			return;
 		}		
-		if(changed){
+		// An event was switched, so some things need to happen e.g. loading
+		// annotations, images
+		if(event_switched){
 			annotation_stream.value = recording.Events[current_event].annotation;
-			changed = false;
+			event_switched = false;
 			var an_image = new Image();	
 			an_image.onload=function(){
 				main_image = an_image;
+				image_updated = true;
 			}
 			an_image.src = "sample1/"+ recording.Events[current_event].image;
 		}
-		var gap = (image_canvas.width - (image_canvas.width * (main_image.width / image_canvas.width))) / 2;
-		image_context.drawImage(main_image, gap, 0, (image_canvas.width * (image_canvas.width / main_image.width)), image_canvas.height);
-		console.log(gap);
+		
+		// Drawing the image... If no boolean check, there's a small
+		// (~20ms) flicker of the previous event if any
+		if(image_updated == true){
+			image_context.drawImage(main_image, 0, 0, image_canvas.width, image_canvas.height);
+		}
 	}
 }
 
+// On resize, recalculate bounds for everything; render loop takes care
+// of the redrawing
 window.addEventListener('resize', function(event){
 	console.log("Main window was resized");
 	seek_overlay_context.fillStyle="#000000";
@@ -218,7 +285,7 @@ window.addEventListener('resize', function(event){
 	init();
 });
  
-// Change annotation mode
+// Change annotation mode (doesn't work)
 function change_annotation_mode(){
 	var check = document.getElementById("annotation_selection");
 	var value = check.checked;
@@ -254,6 +321,7 @@ function change_annotation_mode(){
 	}
 }
 
+// Volume adjuster
 function change_volume(slider_vol){
 	audio.volume = slider_vol / 100;
 	console.log(audio.volume);
