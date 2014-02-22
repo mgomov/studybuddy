@@ -6,12 +6,15 @@
 	<div id="left_menu_options">
 		<ul>
 			<input type="file" id="file" onchange="load_file(this)"></input> 
-            <button onclick="">Menu Option 1</button>
+	 
+            <button onclick="exif_test()">Menu Option 1</button>
 			<button onclick="">Menu Option 2</button>
 			<button onclick="">Menu Option 3</button>
 			<button onclick="">Menu Option 4</button>
 			<input type="checkbox" id="annotation_selection" onchange="change_annotation_mode()">Annotations mode<br>
 			<input id="vol_slider" type="range" min="1" max="100" value="50" onchange= "change_volume(this.value)"></input>
+			
+			<input type="file" id="file" onchange="load_parse_image(this)"></input>
 		</ul>
 	</div>
 </nav>
@@ -27,6 +30,8 @@
 <canvas id="seek_canvas"></canvas>
 <canvas id="seek_overlay_canvas"></canvas>
 
+<script src="binaryajax.js"></script>
+<script src="exif.js"></script>
 <script src="utils.js"></script>
 <script src="events.js"></script>
 <script src="studybuddy.js"></script>

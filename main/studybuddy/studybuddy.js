@@ -19,6 +19,7 @@ var image_context = image_canvas.getContext("2d");
 // Image up for display currently
 var main_image = document.getElementById("main_image");
 
+
 // Convenience vars for switching between events... 
 // Signals that an event was switched and some things need to happen
 var event_switched = false;
@@ -38,6 +39,13 @@ var seek_overlay_context = seek_overlay_canvas.getContext("2d");
 var annotation_stream = document.getElementById("annotation_stream");
 // Input box
 var annotation_input = document.getElementById("annotation_input");
+
+function exif_test(){
+	var etest = document.getElementById("image_test");
+	console.log(EXIF.getAllTags(etest));
+	var timestamp = EXIF.getTag(etest, "DateTimeOriginal");
+	console.log(timestamp);
+}
 
 // Click listener for translating coordinates and passing them to what handles them 
 image_canvas.addEventListener('click', function(event) {
@@ -135,7 +143,59 @@ setInterval(render_main_screen, 20);
 //			Attempt to merge, bring to a screen where the user can tune
 //			the merge
 
+
+function load_parse_image(file){
+	console.log("Parsing an image...");
+	var result;
+	var reader = new FileReader();
+	reader.onload = readSuccess;
+	function readSuccess(evt){
+		result = evt.target.result;
+		console.log(result);
+		parse_image(result);
+	}
+	reader.readAsArrayBuffer(file.files[0]);
+}
+
+function parse_image(arrbuf){
+	var offset = 0;
+	var length = 0;
+	var headerindex = 0;
+	var result = "";
+	var arrvw = new Uint8Array(arrbuf);
+	for(var i = 0; i < 4096; i++){	
+		if(arrvw[i] == 0x4d && arrvw[i + 1] == 0x4d){
+			headerindex = i;
+			console.log("Motorola align");
+		}
+		
+		if(arrvw[i] == 0x49 && arrvw[i + 1] == 0x49){
+			headerindex = i;
+			console.log("Intel align");
+		}
+		if(arrvw[i] == 0x90 && arrvw[i + 1] == 0x03){
+			var temp = 
+			  ((arrvw[i + 8]).toString(16).slice(-2)) + ""
+			+ ((arrvw[i + 9]).toString(16).slice(-2)) + "" 
+			+ ((arrvw[i + 10]).toString(16).slice(-2)) + "" 
+			+ ((arrvw[i + 11]).toString(16).slice(-2));
+			console.log(temp);
+			offset = parseInt(temp, 16);
+			console.log("Offset: " + offset);
+			
+			length = 20;
+			break;
+		}
+	}
+	for(var j = offset + headerindex; j < offset + 40; j++){
+		result += String.fromCharCode(arrvw[j]);
+	}
+	
+	console.log(result + "\n");
+}
+//[00] [02] [00] [00] [00] [14] [00] [00] [01] [49]
 // Loads a file and parses its JSON into recording
+
 function load_file(file){
 	// This is a pretty arbitrary process for loading a file in 
 	var reader = new FileReader();
@@ -150,6 +210,7 @@ function load_file(file){
 	recording_file = file.files[0];
 	reader.readAsText(file.files[0]);
 }
+
 
 // Does the JSON parsing and puts it into the recording
 function parse_file(result){
