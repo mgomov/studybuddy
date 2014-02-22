@@ -14,7 +14,8 @@
 			<input type="checkbox" id="annotation_selection" onchange="change_annotation_mode()">Annotations mode<br>
 			<input id="vol_slider" type="range" min="1" max="100" value="50" onchange= "change_volume(this.value)"></input>
 			
-			<input type="file" id="file" onchange="load_parse_image(this)"></input>
+			<input type="file" id="file2" onchange="load_parse_image(this)"></input>
+			<input type="file" id="file_merge" onchange="load_merge_files(this)" multiple></input>
 		</ul>
 	</div>
 </nav>
@@ -30,8 +31,7 @@
 <canvas id="seek_canvas"></canvas>
 <canvas id="seek_overlay_canvas"></canvas>
 
-<script src="binaryajax.js"></script>
-<script src="exif.js"></script>
+<script src="files.js"></script>
 <script src="utils.js"></script>
 <script src="events.js"></script>
 <script src="studybuddy.js"></script>
