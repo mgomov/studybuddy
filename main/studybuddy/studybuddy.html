@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <link rel="stylesheet" media="all" href="styles.css"/>
 <audio id="audio_player" src=""></audio>
+<audio id="audio_length" src=""></audio>
 <image id="main_image" style="display:none;"></image>
 <nav id="left_menu">
 	<div id="left_menu_options">
@@ -16,6 +17,7 @@
 			
 			<input type="file" id="file2" onchange="load_parse_image(this)"></input>
 			<input type="file" id="file_merge" onchange="load_merge_files(this)" multiple></input>
+			<input type="time" id="time_merge"></input>
 		</ul>
 	</div>
 </nav>

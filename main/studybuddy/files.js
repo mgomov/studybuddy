@@ -10,6 +10,22 @@ function load_merge_files(file){
 		"Events": []
 	}
 	
+	// Audio file 
+	var audfile;
+	
+	// Finds the mp3 file from the selection
+	for(var aud = 0; aud < file.files.length; aud++){
+		if(file.files[aud].name.indexOf(".mp3") != -1){
+			audfile = file.files[aud];
+		}
+	}
+	
+	// If no mp3, leave merge 
+	if(!audfile){
+		console.log("No valid audio file found; leaving merge...");
+		//return; // No return since we're just testing things at the moment
+	}
+	
 	console.log(file.files.length + " files: \n");
 	var timestamp = "";	
 	var previousImageTime = "";
@@ -20,7 +36,13 @@ function load_merge_files(file){
 		
 		var result;
 		var sum = 0;
-		var audioStart = new Date('2014/02/13 11:11:00'); // hard coded for now should be easy to get info from user
+		
+		// Getting the user's input time 
+		var tempA = document.getElementById("time_merge").value;
+		
+		// Initialized later using tempA and the date(year month day) from the first image
+		var audioStart;
+		
 		var audioLength = 7200; // 2 hour
 		var reader = new FileReader();
 		reader.onload = readSuccess;
@@ -44,6 +66,12 @@ function load_merge_files(file){
 			timestamp = timestamp + endPart;
 
 			timestamp = new Date(timestamp); // make timestamp a Date object for easy time difference
+			
+			// Loading audioStart from user's input
+			if(!audioStart){
+				audioStart = new Date(timestamp.getFullYear() + "/0" +  (timestamp.getMonth() + 1) + "/" + timestamp.getDate() + " " + tempA.slice(0, 2) + ":" + tempA.slice(3, 5) + ":00");
+				console.log("The user inputted date for the audio start time was: " + audioStart);
+			}
 			
 			//console.log("previous ", previousImageTime);
 			//console.log("current ", timestamp);
