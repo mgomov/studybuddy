@@ -10,35 +10,79 @@ function load_merge_files(file){
 	}
 	
 	console.log(file.files.length + " files: \n");
-	
+	var timestamp = "";	
+	var previousImageTime = "";
+	var endPart = "";
+	var count = 0;
 	for(var i = 0; i < file.files.length; i++){
 		console.log("\t" + file.files[i].name);
-		var constr_event = 
-		{
-			"time":0,
-			"duration":0,
-			"image":"",
-			"annotation":""
-		}
-		constr_event.image = file.files[i].name;
 			
 		var result;
-		var timestamp = "";
+		var sum = 0;
+		var timeBeforePhoto = 0;
+		var audioStart = new Date('2014/02/13 11:11:00'); // hard coded for now should be easy to get info from user
+		var audioLength = 7200; // 2 hour
 		var reader = new FileReader();
 		reader.onload = readSuccess;
+
 		function readSuccess(evt){
+			//get previous image time
+			var constr_event = 
+			{
+				"time":0,
+				"duration":0,
+				"image":"",
+				"annotation":""
+			}
+			constr_event.image = file.files[count].name;
+			constr_event.time = sum;  // length of all durations
+			// get previous time stamp if their is one otherwise get audio time
+			if (timestamp == "")
+			{
+				previousImageTime = audioStart
+			}
+			else
+			{
+				previousImageTime = timestamp;
+			}
 			result = evt.target.result;
 			timestamp = parse_image(result);
+
+			//format for Date object splits timestamp changes date section semicolons to slash
+			endPart = timestamp.slice(11);
+			timestamp = timestamp.slice(0,11);
+			timestamp = timestamp.replace(/:/g,'/');
+			timestamp = timestamp + endPart;
+
+			timestamp = new Date(timestamp); // make timestamp a Date object for easy time difference
+			
+			console.log("previous ", previousImageTime);
+			console.log("current ", timestamp);
+			
+			
+			sum+=Math.abs(timestamp - previousImageTime)/1000; // add duration to sum
+			
+		
+
+			constr_event.duration = Math.abs(timestamp - previousImageTime)/1000; // get difference in time into seconds.
+			console.log("pushing ", constr_event);	
+			constr_array.Events.push(constr_event);
+								
+			if (count == file.files.length-1)
+				console.log(constr_array.Events); // just to make sure it worked correctly
+
+			count+=1; // keep track of the image we are working with 
+			
 			// This is where I stopped; need to parse the
 			// timestamp into a duration, etc and pay 
 			// attention to the previous event's timestamp
 			// then put all this info into constr_event fields
 		}
-		console.log(timestamp);
 		reader.readAsArrayBuffer(file.files[i]);	
-	
-		constr_array.Events.push(constr_event);
+		//console.log("pushing ", constr_event);   // runs to early
+		//constr_array.Events.push(constr_event);  // runs before readSuccess
 	}
+		console.log(constr_array.Events);   // this code runs before readSuccess is finished.....
 }
 
 function load_parse_image(file){
