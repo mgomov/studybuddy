@@ -1,6 +1,7 @@
 function load_merge_files(file){
 	console.log("Merging files...");
-	
+	var times = new Array();
+	var durations = new Array();
 	var constr_array = 
 	{
 		"audio":"",
@@ -16,27 +17,15 @@ function load_merge_files(file){
 	var count = 0;
 	for(var i = 0; i < file.files.length; i++){
 		console.log("\t" + file.files[i].name);
-			
+		
 		var result;
 		var sum = 0;
-		var timeBeforePhoto = 0;
 		var audioStart = new Date('2014/02/13 11:11:00'); // hard coded for now should be easy to get info from user
 		var audioLength = 7200; // 2 hour
 		var reader = new FileReader();
 		reader.onload = readSuccess;
 
 		function readSuccess(evt){
-			//get previous image time
-			var constr_event = 
-			{
-				"time":0,
-				"duration":0,
-				"image":"",
-				"annotation":""
-			}
-			constr_event.image = file.files[count].name;
-			constr_event.time = sum;  // length of all durations
-			// get previous time stamp if their is one otherwise get audio time
 			if (timestamp == "")
 			{
 				previousImageTime = audioStart
@@ -56,21 +45,51 @@ function load_merge_files(file){
 
 			timestamp = new Date(timestamp); // make timestamp a Date object for easy time difference
 			
-			console.log("previous ", previousImageTime);
-			console.log("current ", timestamp);
+			//console.log("previous ", previousImageTime);
+			//console.log("current ", timestamp);
+			times[count] = sum;
+			durations[count] = Math.abs(timestamp - previousImageTime)/1000;
+											
+			if (count == file.files.length-1)
+			{
+				var timeSum = 0;
+				//console.log(constr_array.Events); // just to make sure it worked correctly
+				console.log(times);
+				console.log(durations);
 			
-			
+				for (var j = 0; j < file.files.length; j++)
+				{
+					var copy = 
+					{
+						"time":0,
+						"duration":0,
+						"image":"",
+						"annotation":""
+					}
+					copy.image = file.files[j].name;
+					if (j==0)
+					{
+						copy.duration = durations[0] + durations[1];
+						timeSum += copy.duration;
+					}
+					else if(j==file.files.length-1)
+					{
+						copy.time = timeSum;
+						copy.duration = audioLength - durations[j] - times[j];
+					}
+					else
+					{
+						copy.time = timeSum;
+						copy.duration = durations[j+1];
+						timeSum+=copy.duration;
+					}
+					constr_array.Events.push(copy);
+				}
+				console.log(constr_array.Events); 
+
+			}
 			sum+=Math.abs(timestamp - previousImageTime)/1000; // add duration to sum
 			
-		
-
-			constr_event.duration = Math.abs(timestamp - previousImageTime)/1000; // get difference in time into seconds.
-			console.log("pushing ", constr_event);	
-			constr_array.Events.push(constr_event);
-								
-			if (count == file.files.length-1)
-				console.log(constr_array.Events); // just to make sure it worked correctly
-
 			count+=1; // keep track of the image we are working with 
 			
 			// This is where I stopped; need to parse the
