@@ -172,7 +172,6 @@ function load_file(file){
 	reader.readAsText(file.files[0]);
 }
 
-
 // Does the JSON parsing and puts it into the recording
 function parse_file(result){
 	console.log(recording_file);
