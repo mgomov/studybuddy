@@ -10,6 +10,13 @@ function load_merge_files(file){
 		"Events": []
 	}
 	
+	console.log("TESTING ");
+	
+	console.log(file);
+	
+	console.log(file.files);
+	
+	console.log("TESTING ");
 	// Audio file 
 	var audfile;
 	

@@ -58,6 +58,20 @@ image_canvas.addEventListener('click', function(event) {
 		audio.currentTime = seek_calculate(x);
 	// Else, the click isn't in the bar, so we want to pause/play the video
 	}else{
+	
+		// Iterate through all active points; if within the 
+		// Bounds of a point, flip its active state and return
+		// (so as not to pause inadvertently the recording
+		for(var i = 0; i < recording.Events[current_event].Points.length; i++){
+			var current_point = recording.Events[current_event].Points[i];
+			if(x >= current_point.x - 10 && x <= current_point.x + 10){
+				if(y >= current_point.y - 10 && y <= current_point.y + 10){
+					console.log("Flipping a point's active state...");
+					recording.Events[current_event].Points[i].active = !(recording.Events[current_event].Points[i].active);
+					return;
+				}
+			}
+		}
 		console.log("Clicked the main canvas at (" + x +", " + y + ").");
 		if(audio.paused){
 			audio.play();
@@ -65,6 +79,16 @@ image_canvas.addEventListener('click', function(event) {
 			audio.pause();
 		}
 	}
+}, false);
+
+// Right click event; for now, adds an annotation at that point from the annotation input box's value	
+image_canvas.addEventListener('contextmenu', function(event) {
+	console.log("Adding a point");
+	var x = event.pageX - image_canvas.offsetLeft;
+	var y = event.pageY - image_canvas.offsetTop;
+	
+	add_point(x, y, annotation_input.value);
+	annotation_input.value = "";
 }, false);
 
 // Calculates time to seek to based on x position of click on the seek bar
@@ -227,8 +251,12 @@ function draw_first_layer(){
 	image_context.fillRect(0, 0, w, h);
 	audio.volume = 0;
 	
+	
 	// Handling drawing of images as well as advancing events
 	if(recording != undefined){
+	
+
+	
 		// Updates the current event if necessary
 		current_event = update_event(current_event, recording.Events, audio.currentTime);
 		
@@ -256,6 +284,48 @@ function draw_first_layer(){
 		if(image_updated == true){
 			image_context.drawImage(main_image, 0, 0, image_canvas.width, image_canvas.height);
 		}
+		
+		// "Post-it" feature... render each post-it (referred to as point from here) for the image
+		for(var i = 0; i < recording.Events[current_event].Points.length; i++){
+			// For drawing discrete circles
+			image_context.beginPath();
+			
+			// convenience
+			var current_point = recording.Events[current_event].Points[i];
+			
+			// If it's an active point, make it green... Else,
+			// it should be red (can change spec later)
+			if(current_point.active == true){
+				image_context.fillStyle = "#00ff00";
+			} else { 
+				image_context.fillStyle = "#ff0000";
+			}
+			
+			// Draw the circle at the x and y specified 
+			image_context.arc(current_point.x, current_point.y, 10, 0, 2 * Math.PI, false);
+			image_context.fill();
+			image_context.lineWidth = 5;
+			
+			// Sets color of the little border around the points
+			if(current_point.active == true){
+				image_context.strokeStyle = "#003300";
+			} else { 
+				image_context.strokeStyle = "#330000";
+			}
+			
+			// Draw the point and all defined lines
+			image_context.stroke();
+			
+			// If it's an active point, draw its annotation
+			// TODO: Text positioning convenient relative to 
+			// canvas, specified width (or fit to screen width)
+			if(current_point.active == true){
+				image_context.fillStyle = "#00ff00";
+				image_context.font = '12pt Helvetica sans-serif';
+				image_context.fillText(current_point.annotation,current_point.x + 5, current_point.y + 12);
+			}
+		}
+		
 	}
 }
 
