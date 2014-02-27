@@ -23,19 +23,12 @@ function update_event(current_event, events, current_time){
 	return -3;
 }
 
-// TODO
-function add_annotation(time, duration, text, image, events){
-	
-}
-
-// TODO
-function edit_annotation(time, duration, text, image, event_number){
-
-}
-
-// TODO
-function remove_annotation(event_number){
-
+function load_recording(index){
+	console.log("LOADING INDEX " + index);
+	recording = master.Recordings[index];
+	audio.src = "data/" + recording.audio;
+	audio.load();
+	current_event = -1;
 }
 
 function add_point(x, y, ptannot){

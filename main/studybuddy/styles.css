@@ -21,6 +21,30 @@ button
 	font: 100%/120% Helvetica, sans-serif;
 }
 
+ul
+{
+	text-align:left;
+	-webkit-padding-start: 0px;
+}
+
+a
+{
+	display:block;
+}
+
+li
+{
+	background:#050505;
+	font: 100%/120% Helvetica, sans-serif;
+	color:#dfdfdf;
+	width:150px;
+	list-style-type: none;
+	border:solid;
+	border-width:1px;
+	border-color:#bfbfbf;
+	left:0;
+}
+
 textarea
 {
 	background:#0f0f0f;

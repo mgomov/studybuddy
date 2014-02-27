@@ -1,5 +1,7 @@
 var _TEMPFILES;
- 
+var mainfile = "main.sb";
+
+
 function pre_load_merge_files(file){
         var audfile;
         _TEMPFILES = file;
@@ -13,6 +15,7 @@ function pre_load_merge_files(file){
         var dur_source = document.getElementById("duration_source");
        	console.log(dur_source);
         dur_source.src = audpath;
+		dur_source.load();
         console.log("after");
         //load_merge_files(_TEMPFILES, aud.duration);
         // calls on_aud_dur_load(aud)
@@ -31,6 +34,7 @@ function load_merge_files(file, lengthOfAudio){
 	var durations = new Array();
 	var constr_array = 
 	{
+		"title":"",
 		"audio":"",
 		"category":"",
 		"notes":"",
@@ -130,7 +134,9 @@ function load_merge_files(file, lengthOfAudio){
 						"time":0,
 						"duration":0,
 						"image":"",
-						"annotation":""
+						"annotation":"",
+						"Points":[
+						]
 					}
 					copy.image = file.files[j].name;
 					if (j==0)
@@ -167,7 +173,25 @@ function load_merge_files(file, lengthOfAudio){
 		//console.log("pushing ", constr_event);   // runs to early
 		//constr_array.Events.push(constr_event);  // runs before readSuccess
 	}
-		console.log(constr_array.Events);   // this code runs before readSuccess is finished.....
+	master.Recordings.push(constr_array);
+	
+	var recording_list = document.getElementById("browser_list");
+	recording_list.innerHTML="";
+	for(var i = 0; i < master.Recordings.length; i++){
+		var list_element = document.createElement("li");
+		var list_element_anchor = document.createElement("a");
+		list_element_anchor.id = i.toString();
+		list_element_anchor.onclick = function(){load_recording(this.id); };
+		list_element_anchor.innerHTML = master.Recordings[i].title;
+		if(master.Recordings[i].title == ""){
+			list_element_anchor.innerHTML = "Untitled";
+		}
+		list_element.appendChild(list_element_anchor);
+		recording_list.appendChild(list_element);
+	}
+	
+	/* TODO: Write to file here... JS is making it very difficult to do anything with files though... */
+	console.log(constr_array.Events);  
 }
 
 function load_parse_image(file){
@@ -290,7 +314,7 @@ function load_file(file){
 	// This is a pretty arbitrary process for loading a file in 
 	var reader = new FileReader();
 	var result;
-	
+	master_file_reference = file;
 	// Onload for asynchronous functions (e.g. loading a file)
 	reader.onload = readSuccess;   
     function readSuccess(evt) { 
@@ -305,7 +329,16 @@ function load_file(file){
 function parse_file(result){
 	console.log(recording_file);
 	var jsonData = JSON.parse(result);
-	recording = jsonData;
-	audio.src = "sample1/" + recording.audio;
-	current_event = -1;
+	master = jsonData;
+	
+	var recording_list = document.getElementById("browser_list");
+	for(var i = 0; i < master.Recordings.length; i++){
+		var list_element = document.createElement("li");
+		var list_element_anchor = document.createElement("a");
+		list_element_anchor.id = i.toString();
+		list_element_anchor.onclick = function(){load_recording(this.id); };
+		list_element_anchor.innerHTML = master.Recordings[i].title;
+		list_element.appendChild(list_element_anchor);
+		recording_list.appendChild(list_element);
+	}
 }
