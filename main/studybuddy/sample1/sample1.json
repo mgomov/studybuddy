@@ -5,7 +5,7 @@
 	"Events": [
 	{
 		"time":0,
-		"duration":5,
+		"duration":45,
 		"image":"demo1.jpg",
 		"annotation":"This is an annotation for the first image of the demo, demo1.jpg",
 		"Points":[
@@ -13,8 +13,8 @@
 		]
 	},
 	{
-		"time":15,
-		"duration":5,
+		"time":45,
+		"duration":1,
 		"image":"demo2.jpg",
 		"annotation":"This is an annotation for the second image of the demo, demo2.jpg",
 		"Points":[
@@ -22,8 +22,8 @@
 		]
 	},
 	{
-		"time":25,
-		"duration":5,
+		"time":46,
+		"duration":34,
 		"image":"demo3.jpg",
 		"annotation":"This is an annotation for the third image of the demo, demo3.jpg",
 		"Points":[

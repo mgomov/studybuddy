@@ -158,15 +158,6 @@ render_main_screen();
 // Adds render of the main canvas to a loop
 setInterval(render_main_screen, 20);
 
-// A few possible things based on selected files:
-//		Open a recording file
-// 			It's parsed, opened and loaded ready for use
-//		Open an audio file
-//			Starts a fresh session, generates a recording file
-//		Open multiple files
-//			Attempt to merge, bring to a screen where the user can tune
-//			the merge
-
 // Main render function for the application
 function render_main_screen(){
 	

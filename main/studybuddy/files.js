@@ -1,4 +1,31 @@
-function load_merge_files(file){
+var _TEMPFILES;
+ 
+function pre_load_merge_files(file){
+        var audfile;
+        _TEMPFILES = file;
+        for(var aud = 0; aud < file.files.length; aud++){
+                if(file.files[aud].name.indexOf(".mp3") != -1 || file.files[aud].name.indexOf(".m4a") != -1){
+                        audfile = file.files[aud];
+                }
+        }
+       
+        var audpath = webkitURL.createObjectURL(audfile);
+        var dur_source = document.getElementById("duration_source");
+       	console.log(dur_source);
+        dur_source.src = audpath;
+        console.log("after");
+        //load_merge_files(_TEMPFILES, aud.duration);
+        // calls on_aud_dur_load(aud)
+		// setTimeout(on_aud_dur_load(audpath),5000);
+        //on_aud_dur_load(aud);
+}
+ 
+function on_aud_dur_load(aud){
+        console.log("hello from on_aud_dur_load", aud.duration);
+        load_merge_files(_TEMPFILES, aud.duration);
+}
+
+function load_merge_files(file, lengthOfAudio){
 	console.log("Merging files...");
 	var times = new Array();
 	var durations = new Array();
@@ -22,15 +49,18 @@ function load_merge_files(file){
 	
 	// Finds the mp3 file from the selection
 	for(var aud = 0; aud < file.files.length; aud++){
-		if(file.files[aud].name.indexOf(".mp3") != -1){
+		if(file.files[aud].name.indexOf(".mp3") != -1 || file.files[aud].name.indexOf(".m4a") != -1){
 			audfile = file.files[aud];
+			constr_array.audio += audfile.name;
+
 		}
 	}
+	objectURL = URL.createObjectURL(audfile);
 	
 	// If no mp3, leave merge 
 	if(!audfile){
 		console.log("No valid audio file found; leaving merge...");
-		//return; // No return since we're just testing things at the moment
+		return; // No return since we're just testing things at the moment
 	}
 	
 	console.log(file.files.length + " files: \n");
@@ -38,7 +68,7 @@ function load_merge_files(file){
 	var previousImageTime = "";
 	var endPart = "";
 	var count = 0;
-	for(var i = 0; i < file.files.length; i++){
+	for(var i = 0; i < file.files.length-1; i++){
 		console.log("\t" + file.files[i].name);
 		
 		var result;
@@ -50,7 +80,7 @@ function load_merge_files(file){
 		// Initialized later using tempA and the date(year month day) from the first image
 		var audioStart;
 		
-		var audioLength = 7200; // 2 hour
+		var audioLength = lengthOfAudio;//7200; // 2 hour
 		var reader = new FileReader();
 		reader.onload = readSuccess;
 
@@ -78,6 +108,7 @@ function load_merge_files(file){
 			if(!audioStart){
 				audioStart = new Date(timestamp.getFullYear() + "/0" +  (timestamp.getMonth() + 1) + "/" + timestamp.getDate() + " " + tempA.slice(0, 2) + ":" + tempA.slice(3, 5) + ":00");
 				console.log("The user inputted date for the audio start time was: " + audioStart);
+				previousImageTime = audioStart;
 			}
 			
 			//console.log("previous ", previousImageTime);
@@ -85,14 +116,14 @@ function load_merge_files(file){
 			times[count] = sum;
 			durations[count] = Math.abs(timestamp - previousImageTime)/1000;
 											
-			if (count == file.files.length-1)
+			if (count == file.files.length-2)
 			{
 				var timeSum = 0;
 				//console.log(constr_array.Events); // just to make sure it worked correctly
 				console.log(times);
 				console.log(durations);
 			
-				for (var j = 0; j < file.files.length; j++)
+				for (var j = 0; j < file.files.length-1; j++)
 				{
 					var copy = 
 					{
@@ -107,7 +138,7 @@ function load_merge_files(file){
 						copy.duration = durations[0] + durations[1];
 						timeSum += copy.duration;
 					}
-					else if(j==file.files.length-1)
+					else if(j==file.files.length-2)
 					{
 						copy.time = timeSum;
 						copy.duration = audioLength - durations[j] - times[j];
@@ -120,7 +151,7 @@ function load_merge_files(file){
 					}
 					constr_array.Events.push(copy);
 				}
-				console.log(constr_array.Events); 
+				console.log(constr_array); 
 
 			}
 			sum+=Math.abs(timestamp - previousImageTime)/1000; // add duration to sum

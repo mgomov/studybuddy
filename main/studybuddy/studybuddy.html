@@ -1,40 +1,51 @@
 <!DOCTYPE html>
 <link rel="stylesheet" media="all" href="styles.css"/>
 <audio id="audio_player" src=""></audio>
-<audio id="audio_length" src=""></audio>
 <image id="main_image" style="display:none;"></image>
 <nav id="left_menu">
-	<div id="left_menu_options">
-		<ul>
-			<input type="file" id="file" onchange="load_file(this)"></input> 
-	 
+        <div id="left_menu_options">
+                <ul>
+                        <input type="file" id="file" onchange="load_file(this)"></input>
+         
             <button onclick="exif_test()">Menu Option 1</button>
-			<button onclick="">Menu Option 2</button>
-			<button onclick="">Menu Option 3</button>
-			<button onclick="">Menu Option 4</button>
-			<input type="checkbox" id="annotation_selection" onchange="change_annotation_mode()">Annotations mode<br>
-			<input id="vol_slider" type="range" min="1" max="100" value="50" onchange= "change_volume(this.value)"></input>
-			
-			<input type="file" id="file2" onchange="load_parse_image(this)"></input>
-			<input type="file" id="file_merge" onchange="load_merge_files(this)" multiple></input>
-			<input type="time" id="time_merge"></input>
-		</ul>
-	</div>
+                        <button onclick="">Menu Option 2</button>
+                        <button onclick="">Menu Option 3</button>
+                        <button onclick="">Menu Option 4</button>
+                        <input type="checkbox" id="annotation_selection" onchange="change_annotation_mode()">Annotations mode<br>
+                        <input id="vol_slider" type="range" min="1" max="100" value="50" onchange= "change_volume(this.value)"></input>
+                       
+                        <input type="file" id="file2" onchange="load_parse_image(this)"></input>
+                        <input type="file" id="file_merge" onchange="pre_load_merge_files(this)" multiple></input>
+                        <input type="time" id="time_merge"></input>
+                </ul>
+        </div>
 </nav>
-
-<nav id="right_menu">
-	<div id="right_note_stream">
-		<textarea disabled  id="annotation_stream"></textarea>
-		<textarea id="annotation_input" onkeypress="changed_input(this)" onkeyup="changed_input(this)"></textarea>
-	</div>
-</nav>
-
+ 
 <canvas id="image_canvas"></canvas>
 <canvas id="seek_canvas"></canvas>
 <canvas id="seek_overlay_canvas"></canvas>
-
+ 
+<nav id="right_menu">
+        <div id="right_note_stream">
+                <textarea disabled  id="annotation_stream"></textarea>
+                <textarea id="annotation_input" onkeypress="changed_input(this)" onkeyup="changed_input(this)"></textarea>
+        </div>
+</nav>
+ 
+ 
+ 
+<div id="point_context_menu">
+                <div><a id="movePoint">Move</div>
+                <div><a id="deletePoint">Delete</div>
+                <div><a id="movePoint">Move point</div>
+</div>
+ 
 <script src="files.js"></script>
 <script src="utils.js"></script>
 <script src="events.js"></script>
 <script src="studybuddy.js"></script>
+ 
+<audio id="duration_source" src="" onload="on_aud_dur_load(this)"></audio>
+ 
 </html>
+
