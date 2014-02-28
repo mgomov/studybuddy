@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<link rel="stylesheet" media="all" href="styles.css"/>
+<link rel="stylesheet" media="all" href="appdata/style/styles.css"/>
 <audio id="audio_player" src=""></audio>
 <image id="main_image" style="display:none;"></image>
 <nav id="left_menu">
@@ -14,19 +14,18 @@
             <ul id="browser_list"></ul>
         </div>
 </nav>
- 
-<canvas id="image_canvas"></canvas>
+
+<div id = "point_annotation_div">
+<a><textarea id="point_annotation_edit"></textarea></a>
+</div>
+
+
+<div id="container">
+	<canvas id="image_canvas"></canvas>
+	<textarea id="point_annotation_edit" onchange="point_annotation()" current_point=""></textarea>
+</div>
 <canvas id="seek_canvas"></canvas>
 <canvas id="seek_overlay_canvas"></canvas>
- 
-<nav id="right_menu">
-        <div id="right_note_stream">
-                <textarea disabled  id="annotation_stream"></textarea>
-                <textarea id="annotation_input" onkeypress="changed_input(this)" onkeyup="changed_input(this)"></textarea>
-        </div>
-</nav>
- 
- 
  
 <div id="point_context_menu">
                 <div><a id="movePoint">Move</div>
@@ -34,12 +33,14 @@
                 <div><a id="movePoint">Move point</div>
 </div>
  
-<script src="files.js"></script>
-<script src="utils.js"></script>
-<script src="events.js"></script>
-<script src="studybuddy.js"></script>
- 
 <audio id="duration_source" src="" onloadeddata="on_aud_dur_load(this)"></audio>
+ 
+<script src="appdata/script/files.js"></script>
+<script src="appdata/script/utils.js"></script>
+<script src="appdata/script/events.js"></script>
+<script src="appdata/script/render.js"></script>
+<script src="appdata/script/input.js"></script>
+<script src="appdata/script/studybuddy.js"></script>
  
 </html>
 

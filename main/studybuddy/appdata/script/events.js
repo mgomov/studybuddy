@@ -1,4 +1,7 @@
-
+/* events.js
+ * Handles event switching and loading, including loading new recordings
+ */
+ 
 // -1 is before the first annotation
 // -2 is after the last annotation
 function update_event(current_event, events, current_time){
@@ -23,10 +26,12 @@ function update_event(current_event, events, current_time){
 	return -3;
 }
 
-function load_recording(index){
-	console.log("LOADING INDEX " + index);
-	recording = master.Recordings[index];
+// Load a recording picked from the browser
+function load_recording(elem){
+	console.log("LOADING INDEX " + elem.id);
+	recording = master.Recordings[elem.id];
 	audio.src = "data/" + recording.audio;
+	elem.style.color = "#00ff00";	
 	audio.load();
 	current_event = -1;
 }
@@ -36,7 +41,9 @@ function add_point(x, y, ptannot){
 		"x":0,
 		"y":0,
 		"annotation":"",
-		"active":true
+		"active":true,
+		"orientation":0,
+		"width":200
 	};
 	apoint.x = x;
 	apoint.y = y;

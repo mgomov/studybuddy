@@ -1,7 +1,46 @@
+// START of parsing a .sb file (e.g. main.sb)
+// Loads a file and parses its JSON into master variable
+function load_file(file){
+	// This is a pretty arbitrary process for loading a file in 
+	var reader = new FileReader();
+	var result;
+	master_file_reference = file;
+	// Onload for asynchronous functions (e.g. loading a file)
+	reader.onload = readSuccess;   
+    function readSuccess(evt) { 
+		result = evt.target.result;
+		parse_file(result);
+    };
+	recording_file = file.files[0];
+	reader.readAsText(file.files[0]);
+}
+
+// Does the JSON parsing and puts it into the recording
+function parse_file(result){
+	console.log(recording_file);
+	var jsonData = JSON.parse(result);
+	master = jsonData;
+	
+	var recording_list = document.getElementById("browser_list");
+	for(var i = 0; i < master.Recordings.length; i++){
+		var list_element = document.createElement("li");
+		var list_element_anchor = document.createElement("a");
+		list_element_anchor.id = i.toString();
+		list_element_anchor.onclick = function(){load_recording(this); };
+		list_element_anchor.innerHTML = master.Recordings[i].title;
+		list_element.appendChild(list_element_anchor);
+		recording_list.appendChild(list_element);
+	}
+}
+// END parsing of a .sb file
+
+
+// START merge
+
+// Temp var to pass files to main merge, DO NOT REFERENCE outside of merge
 var _TEMPFILES;
-var mainfile = "main.sb";
 
-
+// Gets the audio duration and passes it to the merge
 function pre_load_merge_files(file){
         var audfile;
         _TEMPFILES = file;
@@ -23,11 +62,13 @@ function pre_load_merge_files(file){
         //on_aud_dur_load(aud);
 }
  
+// When audio is loaded, pass its duration to merge
 function on_aud_dur_load(aud){
         console.log("hello from on_aud_dur_load", aud.duration);
         load_merge_files(_TEMPFILES, aud.duration);
 }
 
+// Perform merging
 function load_merge_files(file, lengthOfAudio){
 	console.log("Merging files...");
 	var times = new Array();
@@ -194,49 +235,11 @@ function load_merge_files(file, lengthOfAudio){
 	console.log(constr_array.Events);  
 }
 
-function load_parse_image(file){
-	console.log("Parsing an image...");
-	console.log(file.files[0].name);
-	var result;
-	var reader = new FileReader();
-	if(!reader)
-		console.log("No Reader...");
-	reader.onload = readSuccess;
-	function readSuccess(evt){
-		result = evt.target.result;
-		console.log(result);
-		debug_parse_image(result);
-		parse_image(result);
-	}
-	
-	reader.readAsArrayBuffer(file.files[0]);
-}
+// END Merge
 
-function debug_parse_image(arrbuf){
-	var arrvw = new Uint8Array(arrbuf);
-	var test = "";
-	var test2 = "";
-	var count = 0;
-	console.log("Debug hex dump of image header: ");
-	start = true;
-	for(var i = 0; i < 3168 / 12; i++){
-		for(var j = 0; j < 12; j++){
-			if(start){
-				test += "["  +("0" + arrvw[i * 12 + j].toString(16)).slice(-2)  + "] ";
-			}
-		}
-		
-		for(var k = 0; k < 12;k++){
-			if(start){
-				test += " " + String.fromCharCode(arrvw[i * 12 + k])+ " ";
-			}
-		}
-		
-		test += "\n";
-	}
-	console.log(test);
-}
+// BEGIN parsing for exif tags
 
+// Actually parses the image
 function parse_image(arrbuf){
 	var offset = 0;
 	var length = 0;
@@ -307,38 +310,51 @@ function parse_image(arrbuf){
 	console.log(result + "\n");
 	return result;
 }
-//[00] [02] [00] [00] [00] [14] [00] [00] [01] [49]
-// Loads a file and parses its JSON into recording
 
-function load_file(file){
-	// This is a pretty arbitrary process for loading a file in 
-	var reader = new FileReader();
+// DEBUG FUNCTIONS
+
+
+// Loads in the file and then parses it for exif tags (or a timestamp)
+function load_parse_image(file){
+	console.log("Parsing an image...");
+	console.log(file.files[0].name);
 	var result;
-	master_file_reference = file;
-	// Onload for asynchronous functions (e.g. loading a file)
-	reader.onload = readSuccess;   
-    function readSuccess(evt) { 
+	var reader = new FileReader();
+	if(!reader)
+		console.log("No Reader...");
+	reader.onload = readSuccess;
+	function readSuccess(evt){
 		result = evt.target.result;
-		parse_file(result);
-    };
-	recording_file = file.files[0];
-	reader.readAsText(file.files[0]);
+		console.log(result);
+		debug_parse_image(result);
+		parse_image(result);
+	}
+	
+	reader.readAsArrayBuffer(file.files[0]);
 }
 
-// Does the JSON parsing and puts it into the recording
-function parse_file(result){
-	console.log(recording_file);
-	var jsonData = JSON.parse(result);
-	master = jsonData;
-	
-	var recording_list = document.getElementById("browser_list");
-	for(var i = 0; i < master.Recordings.length; i++){
-		var list_element = document.createElement("li");
-		var list_element_anchor = document.createElement("a");
-		list_element_anchor.id = i.toString();
-		list_element_anchor.onclick = function(){load_recording(this.id); };
-		list_element_anchor.innerHTML = master.Recordings[i].title;
-		list_element.appendChild(list_element_anchor);
-		recording_list.appendChild(list_element);
+// Prints a hex dump of the file
+function debug_parse_image(arrbuf){
+	var arrvw = new Uint8Array(arrbuf);
+	var test = "";
+	var test2 = "";
+	var count = 0;
+	console.log("Debug hex dump of image header: ");
+	start = true;
+	for(var i = 0; i < 3168 / 12; i++){
+		for(var j = 0; j < 12; j++){
+			if(start){
+				test += "["  +("0" + arrvw[i * 12 + j].toString(16)).slice(-2)  + "] ";
+			}
+		}
+		
+		for(var k = 0; k < 12;k++){
+			if(start){
+				test += " " + String.fromCharCode(arrvw[i * 12 + k])+ " ";
+			}
+		}
+		
+		test += "\n";
 	}
+	console.log(test);
 }
