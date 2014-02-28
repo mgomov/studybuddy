@@ -1,7 +1,8 @@
 /* render.js
- * Rendering the main canvases
+ * Rendering the main canvases and all of the drawing that goes on in the
+ * canvases goes here. 
  */
- 
+
 // Main render function for the application
 function render_main_screen(){
 	
@@ -43,8 +44,9 @@ function draw_third_layer(){
 	if((seek_canvas.width - 10) * (audio.currentTime / audio.duration) == 0){
 		// do nothing, since no progress
 	}else if((seek_canvas.width - 10) * (audio.currentTime / audio.duration) < 25){
-		roundRect(seek_overlay_context, 5, 5, (seek_canvas.width - 10) * 
-			(audio.currentTime / audio.duration) , seek_canvas.height - 10, 15, true, true);
+		roundRect(seek_overlay_context, 5, 5, 100, seek_canvas.height - 10, 15, true, true);
+		seek_overlay_context.clearRect((seek_canvas.width - 10) * 
+			(audio.currentTime / audio.duration) , 0, w, h);
 	}else{
 		roundRect(seek_overlay_context, 5, 5, (seek_canvas.width - 10) * 
 		(audio.currentTime / audio.duration) , seek_canvas.height - 10, 15, true, true);
@@ -68,6 +70,19 @@ function draw_second_layer(){
 	// Draw the actual seek bar
 	seek_context.fillStyle ="#0f0f0f";
 	roundRect(seek_context, 5, 5, seek_canvas.width - 10, seek_canvas.height - 10, 15, true, true);
+	if(recording){
+		for(var i = 0; i < recording.Events.length; i++){
+			var an_event = recording.Events[i];
+			var ix = (an_event.time / audio.duration) * seek_canvas.width;
+			var iy = seek_canvas.relativeY;
+			var w = ((an_event.time + an_event.duration) / audio.duration) * seek_canvas.width;
+			var h = seek_canvas.height;
+			
+			seek_context.fillStyle = '#'+Math.floor(Math.random()*16777215).toString(16);
+			seek_context.fillRect(ix, 4, w - ix, h - 8);
+			//seek_context.stroke();
+		}
+	}
 }
 
 // Image layer
@@ -95,7 +110,7 @@ function draw_first_layer(){
 		// the recording and -3 means we're in between events (dead space)
 		if(current_event == -1 || current_event == -2 || current_event == -3){ 
 			image_updated = false;
-			if(play_pause_time <= 0){
+			if(play_pause_time <= 0 && !seek_draw){
 				return;
 			}
 		} else { 	
@@ -105,7 +120,7 @@ function draw_first_layer(){
 				event_switched = false;
 				var an_image = new Image();	
 				an_image.onload=function(){
-					main_image = an_image;
+					main_image = images[current_event];
 					image_updated = true;
 				}
 				an_image.src = "data/"+ recording.Events[current_event].image;
@@ -118,7 +133,18 @@ function draw_first_layer(){
 			}
 			
 			// "Post-it" feature... render each post-it (referred to as point from here) for the image
-			for(var i = 0; i < recording.Events[current_event].Points.length; i++){
+			first_layer_render_points();
+		}
+	}
+	
+	first_layer_render_preview();
+	
+	first_layer_render_playing();
+	
+}
+
+function first_layer_render_points(){
+	for(var i = 0; i < recording.Events[current_event].Points.length; i++){
 				// For drawing discrete circles
 				image_context.beginPath();
 				
@@ -187,9 +213,17 @@ function draw_first_layer(){
 					}
 				}
 			}
+}
+
+function first_layer_render_preview(){
+	if(seek_draw){
+		if(seek_draw_event >= 0){
+			image_context.drawImage(images[seek_draw_event], seek_draw_x, (image_canvas.height - seek_canvas.height - 250), 250, 200 );
 		}
 	}
-	
+}
+
+function first_layer_render_playing(){
 	if(play_pause_time > 0){
 		play_pause_time -= 0.05;
 		var xoff = image_canvas.width / 2;

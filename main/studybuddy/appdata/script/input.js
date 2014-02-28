@@ -1,41 +1,52 @@
 /* input.js
- *
+ * Input-related handlers go here (e.g. click listeners, mouse movement listeners, etc)
  */
  
 document.getElementById("point_annotation_edit").addEventListener('input', function(event){
 	document.getElementById("point_annotation_edit").current_point.annotation = document.getElementById("point_annotation_edit").value;
 });
 
-var drag = false;
-var delta = 0;
-var justdragged = false;
-var moving_point;
-
-var editing_point = false;
-
 image_canvas.addEventListener('mousemove', function(event) {
 	if(drag){
 		delta++;
-	}
-	if(delta > 5){
-		justdragged = true;
-		if(!moving_point){
-			var x = event.pageX - image_canvas.offsetLeft;
-			var y = event.pageY - image_canvas.offsetTop;
-			for(var i = 0; i < recording.Events[current_event].Points.length; i++){
-				var a_point = recording.Events[current_event].Points[i];
-				if(x >= a_point.x - 10 && x <= a_point.x + 10){
-					if(y >= a_point.y - 10 && y <= a_point.y + 10){
-						moving_point = recording.Events[current_event].Points[i];
+		if(delta > 5){
+			justdragged = true;
+			if(!moving_point){
+				var x = event.pageX - image_canvas.offsetLeft;
+				var y = event.pageY - image_canvas.offsetTop;
+				
+				if(current_event < 0){
+					return;
+				}
+				
+				for(var i = 0; i < recording.Events[current_event].Points.length; i++){
+					var a_point = recording.Events[current_event].Points[i];
+					if(x >= a_point.x - 10 && x <= a_point.x + 10){
+						if(y >= a_point.y - 10 && y <= a_point.y + 10){
+							moving_point = recording.Events[current_event].Points[i];
+						}
 					}
 				}
 			}
+			if(!moving_point){
+				return;
+			}
+			moving_point.x = event.clientX;
+			moving_point.y = event.clientY;
 		}
-		if(!moving_point){
-			return;
+	} else {
+		var x = event.clientX;
+		var y = event.clientY;
+		if(seek_canvas.relativeX <= x && x <= seek_canvas.relativeX + seek_canvas.width && seek_canvas.relativeY <= y && y <= seek_canvas.relativeY + seek_canvas.height && recording){
+			x = event.clientX - seek_canvas.relativeX;
+			y = event.clientY - seek_canvas.relativeY;
+			var mo_event = get_event((x / (seek_canvas.width - 15)) * audio.duration);
+			seek_draw = true;
+			seek_draw_event = mo_event;
+			seek_draw_x = event.clientX;
+		} else {
+			seek_draw = false;
 		}
-		moving_point.x = event.clientX;
-		moving_point.y = event.clientY;
 	}
 });
 
@@ -52,7 +63,6 @@ image_canvas.addEventListener('mousedown', function(event) {
 // Click listener for translating coordinates and passing them to what handles them 
 image_canvas.addEventListener('click', function(event) {
 	if(editing_point){
-		
 		editing_point = false;
 		document.getElementById("point_annotation_edit").style.display = "none";
 		document.getElementById("point_annotation_edit").current_point = undefined;
@@ -146,9 +156,6 @@ image_canvas.addEventListener('click', function(event) {
 	}
 }, false);
 
-// Block for context menu for points (right click menu)
-var point_ctx_display = false;
-var point_ctx = document.getElementById("point_context_menu");
 // Right click event; for now, adds an annotation at that point from the annotation input box's value	
 image_canvas.addEventListener('contextmenu', function(event) {
 	// Don't want the browser's context menu to pop up for now
@@ -165,15 +172,3 @@ image_canvas.addEventListener('contextmenu', function(event) {
 	console.log("Adding a point");
 	add_point(x, y, "This is a default annotation\nwith multiple lines\n Click to edit");
 }, false);
-
-// Calculates time to seek to based on x position of click on the seek bar
-function seek_calculate(x){
-	var time;
-	x -= seek_canvas.relativeX;
-	if(x - 5 <= 0){
-		return 0;
-	}
-	x -= 10;
-	time = (x / (seek_canvas.width - 15)) * audio.duration;
-	return time;
-}

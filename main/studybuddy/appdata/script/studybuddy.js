@@ -1,3 +1,7 @@
+/* studybuddy.js
+ * Ties various things together... Global variables go here
+ */
+
 // Width and height, for general use
 var w = window.innerWidth;
 var h = window.innerHeight;
@@ -45,6 +49,25 @@ var annotation_stream = document.getElementById("annotation_stream");
 var annotation_input = document.getElementById("annotation_input");
 
 var play_pause_time = 0;
+
+var drag = false;
+var delta = 0;
+var justdragged = false;
+var moving_point;
+
+var editing_point = false;
+
+// Block for context menu for points (right click menu)
+var point_ctx_display = false;
+var point_ctx = document.getElementById("point_context_menu");
+
+// Temp var to pass files to main merge, DO NOT REFERENCE outside of merge process
+var _TEMPFILES;
+
+var images = new Array();
+var seek_draw = false;
+var seek_draw_event;
+var seek_draw_x;
 
 // Init function; called when window is resized as well as on startup
 function init(){

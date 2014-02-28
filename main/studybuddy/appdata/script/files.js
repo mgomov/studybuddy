@@ -1,3 +1,7 @@
+/* files.js
+ * Handles manipulation of external files
+ */
+
 // START of parsing a .sb file (e.g. main.sb)
 // Loads a file and parses its JSON into master variable
 function load_file(file){
@@ -36,10 +40,6 @@ function parse_file(result){
 
 
 // START merge
-
-// Temp var to pass files to main merge, DO NOT REFERENCE outside of merge
-var _TEMPFILES;
-
 // Gets the audio duration and passes it to the merge
 function pre_load_merge_files(file){
         var audfile;
@@ -65,7 +65,57 @@ function pre_load_merge_files(file){
 // When audio is loaded, pass its duration to merge
 function on_aud_dur_load(aud){
         console.log("hello from on_aud_dur_load", aud.duration);
-        load_merge_files(_TEMPFILES, aud.duration);
+		pre_merge_files(_TEMPFILES, aud.duration);
+}
+
+function pre_merge_files(file, duration){
+	var arr = new Array();
+	
+	function asynch_parse(file, index, max, arr, dur) {
+		var name = file.name;
+		var reader = new FileReader();  
+		reader.onload = function readSuccess(event){
+			var timestamp = "";
+			var result = "";
+			var obj = {
+				"name":"",
+				"date":""
+			};
+			console.log("TEST");
+			console.log(event);
+			result = event.target.result;
+			timestamp = parse_image(result);
+			
+			//format for Date object splits timestamp changes date section semicolons to slash
+			endPart = timestamp.slice(11);
+			timestamp = timestamp.slice(0,11);
+			timestamp = timestamp.replace(/:/g,'/');
+			timestamp = timestamp + endPart;
+			timestamp = new Date(timestamp); // make timestamp a Date object for easy time difference
+			
+			obj.name = name;
+			obj.date = timestamp;
+			arr.push(obj);
+			if(index == max - 1){
+				pre_merge_files_done(arr, dur);
+			}
+		}
+		reader.readAsArrayBuffer(file);
+	}
+
+	for (var i = 0; i < file.files.length; i++) {
+		if(file.files[i].name.indexOf(".jpg") == -1){
+			console.log("Skipping audio file");
+			continue;
+		}
+		asynch_parse(file.files[i], i, file.files.length, arr, duration); 
+	}
+}
+
+function pre_merge_files_done(arr, duration){
+	arr.sort(function(a, b){ return a.date.getTime() > b.date.getTime()});
+	console.log(arr);
+	console.log(duration);
 }
 
 // Perform merging
@@ -73,6 +123,7 @@ function load_merge_files(file, lengthOfAudio){
 	console.log("Merging files...");
 	var times = new Array();
 	var durations = new Array();
+	
 	var constr_array = 
 	{
 		"title":"",
@@ -97,7 +148,6 @@ function load_merge_files(file, lengthOfAudio){
 		if(file.files[aud].name.indexOf(".mp3") != -1 || file.files[aud].name.indexOf(".m4a") != -1){
 			audfile = file.files[aud];
 			constr_array.audio += audfile.name;
-
 		}
 	}
 	objectURL = URL.createObjectURL(audfile);
@@ -105,7 +155,7 @@ function load_merge_files(file, lengthOfAudio){
 	// If no mp3, leave merge 
 	if(!audfile){
 		console.log("No valid audio file found; leaving merge...");
-		return; // No return since we're just testing things at the moment
+		return;
 	}
 	
 	console.log(file.files.length + " files: \n");
@@ -188,7 +238,7 @@ function load_merge_files(file, lengthOfAudio){
 					else if(j==file.files.length-2)
 					{
 						copy.time = timeSum;
-						copy.duration = audioLength - durations[j] - times[j];
+						copy.duration = Math.abs(audioLength-timeSum);
 					}
 					else
 					{
@@ -222,14 +272,17 @@ function load_merge_files(file, lengthOfAudio){
 		var list_element = document.createElement("li");
 		var list_element_anchor = document.createElement("a");
 		list_element_anchor.id = i.toString();
-		list_element_anchor.onclick = function(){load_recording(this.id); };
+		list_element_anchor.onclick = function(){load_recording(this); };
 		list_element_anchor.innerHTML = master.Recordings[i].title;
 		if(master.Recordings[i].title == ""){
 			list_element_anchor.innerHTML = "Untitled";
 		}
 		list_element.appendChild(list_element_anchor);
+		console.log(list_element_anchor.id);
 		recording_list.appendChild(list_element);
 	}
+	
+
 	
 	/* TODO: Write to file here... JS is making it very difficult to do anything with files though... */
 	console.log(constr_array.Events);  
