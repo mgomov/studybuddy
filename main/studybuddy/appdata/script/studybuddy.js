@@ -82,5 +82,4 @@ window.addEventListener('resize', function(event){
 // Volume adjuster
 function change_volume(slider_vol){
 	audio.volume = slider_vol / 100;
-	console.log(audio.volume);
 }

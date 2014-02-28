@@ -4,14 +4,14 @@
 <image id="main_image" style="display:none;"></image>
 <nav id="left_menu">
         <div id="left_menu_options">
-			<input type="file" id="file" onchange="load_file(this)"></input>
-			
-			<input id="vol_slider" type="range" min="1" max="100" value="50" onchange= "change_volume(this.value)"></input>
-		   
-			<input type="file" id="file2" onchange="load_parse_image(this)"></input>
+			<!--<input type="file" id="file2" onchange="load_parse_image(this)"></input>-->
+			<li>Merge files</li>
 			<input type="file" id="file_merge" onchange="pre_load_merge_files(this)" multiple></input>
 			<input type="time" id="time_merge"></input>
-            <ul id="browser_list"></ul>
+			<li>Volume</li>
+			<input id="vol_slider" type="range" min="1" max="100" value="50" onchange= "change_volume(this.value)"></input>
+            <ul id="browser_list"><li>Choose a file below</li></ul>
+			<input type="file" id="file" onchange="load_file(this)"></input>
         </div>
 </nav>
 
