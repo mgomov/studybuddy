@@ -67,57 +67,193 @@ function on_aud_dur_load(aud){
         console.log("hello from on_aud_dur_load", aud.duration);
 		pre_merge_files(_TEMPFILES, aud.duration);
 }
-
+ 
 function pre_merge_files(file, duration){
-	var arr = new Array();
+        var arr = new Array();
+       
+        function asynch_parse(file, index, max, arr, dur) {
+                var name = file.name;
+                var reader = new FileReader();  
+                reader.onload = function readSuccess(event){
+                        var timestamp = "";
+                        var result = "";
+                        var obj = {
+                                "name":"",
+                                "date":""
+                        };
+                        result = event.target.result;
+                        timestamp = parse_image(result);
+                       
+                        //format for Date object splits timestamp changes date section semicolons to slash
+                        endPart = timestamp.slice(11);
+                        timestamp = timestamp.slice(0,11);
+                        timestamp = timestamp.replace(/:/g,'/');
+                        timestamp = timestamp + endPart;
+                        timestamp = new Date(timestamp); // make timestamp a Date object for easy time difference
+                       
+                        obj.name = name;
+                        obj.date = timestamp;
+                        arr.push(obj);
+                        console.log(index);
+                        if(index == max - 2){
+                                pre_merge_files_done(arr, dur, audname);
+                        }
+                }
+                reader.readAsArrayBuffer(file);
+        }
+       
+        var audname;
+       
+        for(var ai = 0; ai < file.files.length; ai++){
+                if(file.files[ai].name.indexOf(".jpg") == -1){
+                        audname = file.files[ai].name;
+                }
+        }
+       
+        for (var i = 0; i < file.files.length; i++) {
+                if(file.files[i].name.indexOf(".jpg") == -1){
+                        console.log("Skipping audio file");
+                        continue;
+                }
+                asynch_parse(file.files[i], i, file.files.length, arr, duration, audname);
+        }
+}
+ 
+function pre_merge_files_done(arr, duration, audname){
+        arr.sort(function(a, b){ return (b.date < a.date) ? 1 : (b.date > a.date) ? -1 : 0;});
+        console.log(arr);
+        console.log(duration);
+        console.log(audname);
+        create_merged_file(arr,Math.floor(duration),audname);
+}
+function create_merged_file(myArr, audioLength, audname)
+{
+	var constr_array = 
+ 	{
+ 		"title":"",
+ 		"audio":"",
+ 		"category":"",
+ 		"notes":"",
+ 		"Events": []
+ 	}
+
+	var audioStart;
+	var tempA = document.getElementById("time_merge").value;
+	var temptime = myArr[0].date;
+	audioStart = new Date(temptime.getFullYear() + "/0" +  
+		(temptime.getMonth() + 1) + "/" + temptime.getDate() 
+		+ " " + tempA.slice(0, 2) + ":" + tempA.slice(3, 5) + ":30");
+	console.log("The user inputted date for the audio start time was: " + audioStart);
+	constr_array.audio = audname;
+/*
+	audioStart = "2/23/2014 10:37:25";
+	audioLength = 120;
+	var myArr = new Array();
+	var obj1 = {
+				"name":"image1.jpg",
+				"date":"2/23/2014 10:37:15"};
+	var obj2 = {
+				"name":"image2.jpg",
+				"date":"2/23/2014 10:37:30"};
+	var obj3 = {
+				"name":"image3.jpg",
+				"date":"2/23/2014 10:37:45"};
+	var obj4 = {
+				"name":"image4.jpg",
+				"date":"2/23/2014 10:38:00"};
+
+	myArr.push(obj1);
+	myArr.push(obj2);
+	myArr.push(obj3); 
+	myArr.push(obj4);*/
+	console.log("Beginning my code");
+	console.log(myArr);
+	console.log(audioStart);
+	console.log(audioStart);
+	var prevtime;
+	var time;
+	var dur;
+	var preDur;
+	var temp;
+	var temp2;
+	console.log(myArr.length);
+	for (var i = 1 ; i <= myArr.length; i++)
+	{
+		var copy = 
+ 	 	{
+ 	 		"time":0,
+ 	 		"duration":0,
+ 	 		"image":"",
+ 	 		"annotation":"",
+ 	 		"Points":[]
+		}
+
+		console.log(i);
+		if(i==1)
+		{
+			time=0;
+			temp = new Date(myArr[i].date);
+			temp2 = new Date(audioStart);
+			dur = (temp - temp2)/1000;
+			console.log(myArr[i-1].name);
+			console.log("time " + time);
+			console.log("duration " + dur);
+			prevtime = temp;
+			copy.time = time;
+			copy.duration = dur;
+			copy.image = myArr[0].name;
+		}
+		else if(i==myArr.length)
+		{
+
+			time = time + dur;
+			dur = audioLength - time;
+			console.log(myArr[i-1].name);
+			console.log("time " + time);
+			console.log("duration " + dur);
+			copy.time = time;
+			copy.duration = dur;
+			copy.image = myArr[i-1].name;
+		}
+		else
+		{
+			time = time + dur
+			
+			temp = new Date(myArr[i-1].date);
+			temp2 = new Date(myArr[i].date);
+			dur = (temp2 - temp)/1000;
+			console.log(myArr[i-1].name);
+			console.log("time " + time);
+			console.log("duration " + dur);
+			copy.time = time;
+			copy.duration = dur;
+			copy.image = myArr[i-1].name;
+		}
+		constr_array.Events.push(copy);
+	}
+	console.log("End my code");
+	console.log(constr_array);
+	master.Recordings.push(constr_array);
+
+	var recording_list = document.getElementById("browser_list");
+	recording_list.innerHTML="";
+	for(var i = 0; i < master.Recordings.length; i++){
+		var list_element = document.createElement("li");
+		var list_element_anchor = document.createElement("a");
+		list_element_anchor.id = i.toString();
+		list_element_anchor.onclick = function(){load_recording(this); };
+		list_element_anchor.innerHTML = master.Recordings[i].title;
+		if(master.Recordings[i].title == ""){
+			list_element_anchor.innerHTML = "Untitled";
+		}
+		list_element.appendChild(list_element_anchor);
+		console.log(list_element_anchor.id);
+		recording_list.appendChild(list_element);
+	}
 	
-	function asynch_parse(file, index, max, arr, dur) {
-		var name = file.name;
-		var reader = new FileReader();  
-		reader.onload = function readSuccess(event){
-			var timestamp = "";
-			var result = "";
-			var obj = {
-				"name":"",
-				"date":""
-			};
-			console.log("TEST");
-			console.log(event);
-			result = event.target.result;
-			timestamp = parse_image(result);
-			
-			//format for Date object splits timestamp changes date section semicolons to slash
-			endPart = timestamp.slice(11);
-			timestamp = timestamp.slice(0,11);
-			timestamp = timestamp.replace(/:/g,'/');
-			timestamp = timestamp + endPart;
-			timestamp = new Date(timestamp); // make timestamp a Date object for easy time difference
-			
-			obj.name = name;
-			obj.date = timestamp;
-			arr.push(obj);
-			if(index == max - 1){
-				pre_merge_files_done(arr, dur);
-			}
-		}
-		reader.readAsArrayBuffer(file);
-	}
 
-	for (var i = 0; i < file.files.length; i++) {
-		if(file.files[i].name.indexOf(".jpg") == -1){
-			console.log("Skipping audio file");
-			continue;
-		}
-		asynch_parse(file.files[i], i, file.files.length, arr, duration); 
-	}
 }
-
-function pre_merge_files_done(arr, duration){
-	arr.sort(function(a, b){ return a.date.getTime() > b.date.getTime()});
-	console.log(arr);
-	console.log(duration);
-}
-
+/*
 // Perform merging
 function load_merge_files(file, lengthOfAudio){
 	console.log("Merging files...");
@@ -207,7 +343,7 @@ function load_merge_files(file, lengthOfAudio){
 			}
 			
 			//console.log("previous ", previousImageTime);
-			//console.log("current ", timestamp);
+			console.log("current ", timestamp);
 			times[count] = sum;
 			durations[count] = Math.abs(timestamp - previousImageTime)/1000;
 											
@@ -285,8 +421,8 @@ function load_merge_files(file, lengthOfAudio){
 
 	
 	/* TODO: Write to file here... JS is making it very difficult to do anything with files though... */
-	console.log(constr_array.Events);  
-}
+//	console.log(constr_array.Events);  
+//}
 
 // END Merge
 

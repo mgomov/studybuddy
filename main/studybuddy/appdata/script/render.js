@@ -99,7 +99,7 @@ function draw_first_layer(){
 	
 	image_context.fillStyle = gradient;
 	image_context.fillRect(0, 0, w, h);
-	audio.volume = 0;
+	//audio.volume = 0;
 	
 	// Handling drawing of images as well as advancing events
 	if(recording != undefined){
