@@ -3,13 +3,13 @@
  */
  
 document.getElementById("point_annotation_edit").addEventListener('input', function(event){
-	document.getElementById("point_annotation_edit").current_point.annotation = document.getElementById("point_annotation_edit").value;
+	document.getElementById("point_annotation_div").current_point.annotation = document.getElementById("point_annotation_edit").value;
 });
 
 image_canvas.addEventListener('mousemove', function(event) {
 	if(drag){
 		delta++;
-		if(delta > 5){
+		if(delta > 2){
 			justdragged = true;
 			if(!moving_point){
 				var x = event.pageX - image_canvas.offsetLeft;
@@ -37,6 +37,13 @@ image_canvas.addEventListener('mousemove', function(event) {
 	} else {
 		var x = event.clientX;
 		var y = event.clientY;
+		
+		if(y > (image_canvas.height - 1/6 * image_canvas.height)){
+			seek_display = true;
+		} else {
+			seek_display = false;
+		}
+		
 		if(seek_canvas.relativeX <= x && x <= seek_canvas.relativeX + seek_canvas.width && seek_canvas.relativeY <= y && y <= seek_canvas.relativeY + seek_canvas.height && recording){
 			x = event.clientX - seek_canvas.relativeX;
 			y = event.clientY - seek_canvas.relativeY;
@@ -64,8 +71,8 @@ image_canvas.addEventListener('mousedown', function(event) {
 image_canvas.addEventListener('click', function(event) {
 	if(editing_point){
 		editing_point = false;
-		document.getElementById("point_annotation_edit").style.display = "none";
-		document.getElementById("point_annotation_edit").current_point = undefined;
+		document.getElementById("point_annotation_div").style.display = "none";
+		document.getElementById("point_annotation_div").current_point = undefined;
 		return;
 	}
 	// Don't want to register a click if we just dragged (which js will do), so 
@@ -132,9 +139,10 @@ image_canvas.addEventListener('click', function(event) {
 					if(x >= xstart && x <= xstart + current_point.width){
 						if(y >= ystart && y <= ystart + heightcalc){
 							editing_point = true;
-							var elem = document.getElementById("point_annotation_edit");
-							elem.value = current_point.annotation;
-							elem.style.width = current_point.width;
+							var elem = document.getElementById("point_annotation_div");
+							var elem2 = document.getElementById("point_annotation_edit");
+							elem2.value = current_point.annotation;
+							//elem.style.width = current_point.width;
 							elem.style.display = "block";
 							elem.style.left = xstart + "px";
 							elem.style.top = ystart + "px";

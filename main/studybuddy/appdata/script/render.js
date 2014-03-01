@@ -17,10 +17,24 @@ function render_main_screen(){
 	draw_first_layer();
 	
 	// Add seek bar (in layers) on top of the image_context canvas
+	
+	if(seek_display){
+		seek_display_opacity += 0.05;
+		if(seek_display_opacity >= 1){
+			seek_display_opacity = 1;
+		}
+	} else {
+		seek_display_opacity -= 0.05;
+		if(seek_display_opacity <= 0){
+			seek_display_opacity = 0;
+		}
+	}
+	image_context.globalAlpha = seek_display_opacity;
 	image_context.drawImage(seek_canvas, seek_canvas.relativeX, 
 		seek_canvas.relativeY);
 	image_context.drawImage(seek_overlay_canvas, seek_canvas.relativeX, 
 		seek_canvas.relativeY);
+	image_context.globalAlpha = 1.0;
 }
 
 // Tracker overlay layer
@@ -78,7 +92,7 @@ function draw_second_layer(){
 			var w = ((an_event.time + an_event.duration) / audio.duration) * seek_canvas.width;
 			var h = seek_canvas.height;
 			
-			seek_context.fillStyle = '#'+Math.floor(Math.random()*16777215).toString(16);
+			seek_context.fillStyle = "#5555ff";
 			seek_context.fillRect(ix, 4, w - ix, h - 8);
 			//seek_context.stroke();
 		}
@@ -226,7 +240,7 @@ function first_layer_render_preview(){
 function first_layer_render_playing(){
 	if(play_pause_time > 0){
 		play_pause_time -= 0.05;
-		var xoff = image_canvas.width / 2;
+		var xoff = image_canvas.width / 2 - 90;
 		var yoff = image_canvas.height / 2;
 		if(audio.paused){
 			var opacity = play_pause_time / 3;

@@ -69,6 +69,9 @@ var seek_draw = false;
 var seek_draw_event;
 var seek_draw_x;
 
+var seek_display = false;
+var seek_display_opacity = 1.0;
+
 // Init function; called when window is resized as well as on startup
 function init(){
 	w = window.innerWidth;

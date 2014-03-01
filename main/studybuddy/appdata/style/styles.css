@@ -16,11 +16,6 @@ input
 	color:#dfdfdf;
 }
 
-button
-{
-	font: 100%/120% Helvetica, sans-serif;
-}
-
 ul
 {
 	text-align:left;
@@ -124,7 +119,16 @@ textarea
 
 #point_annotation_edit
 {
+	width:390px;
+	height:200px;
+}
+
+#point_annotation_div
+{
   position:absolute;
+  width:400px;
+  height:400px;
+  background:grey;
   display:none;
   top:0px;
   left:0px;

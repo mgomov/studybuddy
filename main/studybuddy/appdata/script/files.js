@@ -42,24 +42,37 @@ function parse_file(result){
 // START merge
 // Gets the audio duration and passes it to the merge
 function pre_load_merge_files(file){
-        var audfile;
-        _TEMPFILES = file;
-        for(var aud = 0; aud < file.files.length; aud++){
-                if(file.files[aud].name.indexOf(".mp3") != -1 || file.files[aud].name.indexOf(".m4a") != -1){
-                        audfile = file.files[aud];
-                }
-        }
-       
-        var audpath = webkitURL.createObjectURL(audfile);
-        var dur_source = document.getElementById("duration_source");
-       	console.log(dur_source);
-        dur_source.src = audpath;
-		dur_source.load();
-        console.log("after");
-        //load_merge_files(_TEMPFILES, aud.duration);
-        // calls on_aud_dur_load(aud)
-		// setTimeout(on_aud_dur_load(audpath),5000);
-        //on_aud_dur_load(aud);
+
+	var tempA = document.getElementById("time_merge").value;
+	
+	if(!master){
+		alert("You need to load a *.sb file.");
+		return;
+	}
+	
+	if(tempA == ""){
+		alert("You need to enter a start time for your audio recording.\n The correct format is hh:mm:ss <AM/PM>");
+		return;
+	}
+
+	var audfile;
+	_TEMPFILES = file;
+	for(var aud = 0; aud < file.files.length; aud++){
+			if(file.files[aud].name.indexOf(".mp3") != -1 || file.files[aud].name.indexOf(".m4a") != -1){
+					audfile = file.files[aud];
+			}
+	}
+   
+	var audpath = webkitURL.createObjectURL(audfile);
+	var dur_source = document.getElementById("duration_source");
+	console.log(dur_source);
+	dur_source.src = audpath;
+	dur_source.load();
+	console.log("after");
+	//load_merge_files(_TEMPFILES, aud.duration);
+	// calls on_aud_dur_load(aud)
+	// setTimeout(on_aud_dur_load(audpath),5000);
+	//on_aud_dur_load(aud);
 }
  
 // When audio is loaded, pass its duration to merge
@@ -71,51 +84,76 @@ function on_aud_dur_load(aud){
 function pre_merge_files(file, duration){
         var arr = new Array();
        
-        function asynch_parse(file, index, max, arr, dur) {
+        function asynch_parse(file, arr, index, dur, audname) {
                 var name = file.name;
                 var reader = new FileReader();  
                 reader.onload = function readSuccess(event){
                         var timestamp = "";
                         var result = "";
-                        var obj = {
-                                "name":"",
-                                "date":""
-                        };
+						
                         result = event.target.result;
                         timestamp = parse_image(result);
                        
                         //format for Date object splits timestamp changes date section semicolons to slash
-                        endPart = timestamp.slice(11);
+						var endPart = timestamp.slice(11);
                         timestamp = timestamp.slice(0,11);
                         timestamp = timestamp.replace(/:/g,'/');
                         timestamp = timestamp + endPart;
                         timestamp = new Date(timestamp); // make timestamp a Date object for easy time difference
                        
-                        obj.name = name;
-                        obj.date = timestamp;
-                        arr.push(obj);
-                        console.log(index);
-                        if(index == max - 2){
-                                pre_merge_files_done(arr, dur, audname);
-                        }
+                        console.log("Index: " + index + " out of " + arr.length + " elements");
+                        arr[index].name = name;
+                        arr[index].date = timestamp;
+						arr[index].read = true;
+						
+						console.log("Testing for all read...");
+						console.log(arr);
+						for(var j = 0; j < arr.length; j++){
+							console.log(" Testing index " + j);
+							if(arr[j].read == false){
+								console.log("not all read yet!");
+								return;
+							}
+						}
+						
+						console.log("All read");
+						for(var j1 = 0; j1 < arr.length; j1++){
+							delete arr[j1]['read'];
+						}
+						
+						console.log("all done");
+						pre_merge_files_done(arr, dur, audname);
+						
+						// if(index == max - 1){
+						//      pre_merge_files_done(arr, dur, audname);
+						// }
                 }
                 reader.readAsArrayBuffer(file);
         }
        
         var audname;
-       
+		var filearr = new Array();
         for(var ai = 0; ai < file.files.length; ai++){
                 if(file.files[ai].name.indexOf(".jpg") == -1){
                         audname = file.files[ai].name;
-                }
+                } else {
+					console.log("adding " + ai + " numbered obj");
+					var obj = {
+						"name":"",
+						"date":"",
+						"read":false
+                    };
+					arr.push(obj);
+					filearr.push(file.files[ai]);
+				}
         }
        
-        for (var i = 0; i < file.files.length; i++) {
-                if(file.files[i].name.indexOf(".jpg") == -1){
-                        console.log("Skipping audio file");
-                        continue;
-                }
-                asynch_parse(file.files[i], i, file.files.length, arr, duration, audname);
+        for (var i = 0; i < arr.length; i++) {
+               // if(file.files[i].name.indexOf(".jpg") == -1){
+                //        console.log("Skipping audio file");
+                 //       continue;
+                //}
+                asynch_parse(filearr[i], arr, i, duration, audname);
         }
 }
  
@@ -126,6 +164,7 @@ function pre_merge_files_done(arr, duration, audname){
         console.log(audname);
         create_merged_file(arr,Math.floor(duration),audname);
 }
+
 function create_merged_file(myArr, audioLength, audname)
 {
 	var constr_array = 
@@ -139,6 +178,7 @@ function create_merged_file(myArr, audioLength, audname)
 
 	var audioStart;
 	var tempA = document.getElementById("time_merge").value;
+
 	var temptime = myArr[0].date;
 	audioStart = new Date(temptime.getFullYear() + "/0" +  
 		(temptime.getMonth() + 1) + "/" + temptime.getDate() 
@@ -442,20 +482,20 @@ function parse_image(arrbuf){
 	for(var i = 0; i < 4096; i++){	
 		if(arrvw[i] == 0x4d && arrvw[i + 1] == 0x4d){
 			headerindex = i;
-			console.log("Motorola align");
+			//console.log("Motorola align");
 		}
 		
 		if(arrvw[i] == 0x49 && arrvw[i + 1] == 0x49){
 			headerindex = i;
-			console.log("Intel align");
+			//console.log("Intel align");
 		}
 		
 		if(arrvw[i] == 0x90 && arrvw[i + 1] == 0x04){
-			console.log("0x9004 tag found...");
+			//console.log("0x9004 tag found...");
 		}
 		
 		if(arrvw[i] == 0x01 && arrvw[i + 1] == 0x32){
-			console.log("0x0132 tag found...");
+			//console.log("0x0132 tag found...");
 		}
 		
 		if(arrvw[i] == 0x90 && arrvw[i + 1] == 0x03){
@@ -464,9 +504,9 @@ function parse_image(arrbuf){
 			+ ((arrvw[i + 9]).toString(16).slice(-2)) + "" 
 			+ ((arrvw[i + 10]).toString(16).slice(-2)) + "" 
 			+ ((arrvw[i + 11]).toString(16).slice(-2));
-			console.log(temp);
+			//console.log(temp);
 			offset = parseInt(temp, 16);
-			console.log("Offset: " + offset);
+			//console.log("Offset: " + offset);
 			
 			length = 20;
 			break;
