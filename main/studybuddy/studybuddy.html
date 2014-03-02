@@ -17,17 +17,18 @@
 
 <div id = "point_annotation_div">
 	<a><textarea id="point_annotation_edit" ></textarea></a>
-	<input id="point_more_options" type="button" value="More Options"></input>
-	<input id="point_delete" type="button" value="Delete Point"></input>
-	<div id ="point_more_options">
-		<input id="point_opacity_slider" type="range" min="0" max ="100" value ="25" onchange = ""></input>
-		<select id="point_orientation_select" onchange ="">
+	<input id="point_more_options" type="button" value="More Options" onclick="point_display_options(this)"></input>
+	<input id="point_delete" type="button" value="Delete Point" onclick="delete_point(this)"></input>
+	<div id ="point_more_options_div">
+		<input id="point_opacity_slider" type="range" min="0" max ="100" value ="25" onchange = "point_change_opacity(this)"></input>
+		<select id="point_orientation_select" onchange ="point_orientation(this)">
 			<option value="0">Lower Right</option>
 			<option value="1">Upper Right</option>
 			<option value="2">Upper Left</option>
 			<option value="3">Lower Left</option>
 		</select>
-		<input type="color" id="point_color_picker" onchange="">
+		<input type="color" id="point_color_picker" onchange="point_change_color(this)"></input>
+		<input type="checkbox" id="point_lock" onchange="point_set_lock(this)">Pin</input>
 	</div>
 </div>
 

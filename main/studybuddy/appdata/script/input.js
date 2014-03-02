@@ -28,7 +28,7 @@ image_canvas.addEventListener('mousemove', function(event) {
 					}
 				}
 			}
-			if(!moving_point){
+			if(!moving_point || moving_point.locked){
 				return;
 			}
 			moving_point.x = event.clientX;
@@ -180,3 +180,44 @@ image_canvas.addEventListener('contextmenu', function(event) {
 	console.log("Adding a point");
 	add_point(x, y, "This is a default annotation\nwith multiple lines\n Click to edit");
 }, false);
+
+function point_display_options(elem){
+	var elemdiv = document.getElementById("point_more_options_div");
+	var elemdiv2 = document.getElementById("point_annotation_div");
+	if(elemdiv.style.display == "none" || elemdiv.style.display == ""){
+		elemdiv2.style.borderBottomWidth = 0 + "px";
+		elem.value = "Less Options";
+		elemdiv.style.display = "block";
+	} else {
+		elemdiv2.style.borderBottomWidth = 8 + "px";
+		elem.value = "More Options";
+		elemdiv.style.display = "none";
+	}
+}
+
+function delete_point(elem){
+	for(var i = 0; i < recording.Events[current_event].Points.length; i++){
+		if(recording.Events[current_event].Points[i] === document.getElementById("point_annotation_div").current_point){
+			console.log("Deleted a point.");
+			recording.Events[current_event].Points.splice(i, 1);
+			elemdiv2 = document.getElementById("point_annotation_div").style.display = "none";
+		}
+	}
+}
+
+function point_change_opacity(elem){
+	var opacity = elem.value / 100;
+	document.getElementById("point_annotation_div").current_point.opacity = opacity;
+}
+
+function point_change_color(elem){
+	document.getElementById("point_annotation_div").current_point.color = elem.value;
+}
+
+function point_set_lock(elem){
+	document.getElementById("point_annotation_div").current_point.locked = elem.checked;
+}
+
+function point_orientation(elem){
+	document.getElementById("point_annotation_div").current_point.orientation = elem.value;
+}

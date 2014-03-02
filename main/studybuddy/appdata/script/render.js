@@ -168,19 +168,28 @@ function first_layer_render_points(){
 				// If it's an active point, make it green... Else,
 				// it should be red (can change spec later)
 				if(current_point.active == true){
-					image_context.fillStyle = "#00ff00";
+					image_context.fillStyle = "rgba(" + parseInt(current_point.color.slice(1, 3).toString(10)) + ", " + parseInt(current_point.color.slice(3, 5).toString(10)) + " ," + parseInt(current_point.color.slice(5, 7).toString(10)) + " ," +  current_point.opacity + ")";
+					
 				} else { 
-					image_context.fillStyle = "#ff0000";
+					image_context.fillStyle = "#110000";
 				}
 				
 				// Draw the circle at the x and y specified 
-				image_context.arc(current_point.x, current_point.y, 10, 0, 2 * Math.PI, false);
+				
+				image_context.arc(current_point.x, current_point.y, 10, 0, 2 * Math.PI, true);
+				image_context.fillStyle = "black";
 				image_context.fill();
 				image_context.lineWidth = 5;
 				
 				// Sets color of the little border around the points
 				if(current_point.active == true){
-					image_context.strokeStyle = "#003300";
+					image_context.strokeStyle = "rgba(" + parseInt(current_point.color.slice(1, 3), 16) + ", "
+					+ parseInt(current_point.color.slice(3, 5), 16) + ", " 
+					+ parseInt(current_point.color.slice(5, 7), 16) + ", " + current_point.opacity + ")";
+				
+					//console.log("rgba(" + parseInt(current_point.color.slice(1, 3), 16) + ", "
+					//+ parseInt(current_point.color.slice(3, 5), 16) + ", " 
+					//+ parseInt(current_point.color.slice(5, 7), 16) + ", " + current_point.opacity + ")");
 				} else { 
 					image_context.strokeStyle = "#330000";
 				}
@@ -192,13 +201,13 @@ function first_layer_render_points(){
 				// TODO: Text positioning convenient relative to 
 				// canvas, specified width (or fit to screen width)
 				if(current_point.active){
-					if(current_point == document.getElementById("point_annotation_edit").current_point){
+					if(current_point == document.getElementById("point_annotation_div").current_point){
 						continue;
 					}
 					lines = current_point.annotation.split(/\r\n|\r|\n/);
 					var heightcalc = 12 * lines.length + 12;
 					image_context.fillStyle = "rgba(0, 0, 0, 0.75)";
-					image_context.strokeStyle = "rgba(0, 0, 0, 1.0)";
+					//image_context.strokeStyle = "rgba(0, 0, 0, 1.0)";
 					
 					var xstart;
 					var ystart;
@@ -220,6 +229,7 @@ function first_layer_render_points(){
 					}
 					
 					roundRect(image_context, xstart, ystart, current_point.width, heightcalc, 5, true, true);
+					
 					image_context.fillStyle = "#ffffff";
 					image_context.font = '12pt Helvetica sans-serif';
 					for(var lc = 0; lc < lines.length; lc++){

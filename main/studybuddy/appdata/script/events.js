@@ -64,6 +64,9 @@ function add_point(x, y, ptannot){
 		"annotation":"",
 		"active":true,
 		"orientation":0,
+		"color":"#00ff00",
+		"opacity":0.75,
+		"locked":false,
 		"width":200
 	};
 	apoint.x = x;
