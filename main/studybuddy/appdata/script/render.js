@@ -177,8 +177,11 @@ function first_layer_render_points(){
 				// Draw the circle at the x and y specified 
 				
 				image_context.arc(current_point.x, current_point.y, 10, 0, 2 * Math.PI, true);
-				image_context.fillStyle = "black";
+				image_context.fillStyle = "rgba(" + parseInt(current_point.color.slice(1, 3), 16) + ", "
+					+ parseInt(current_point.color.slice(3, 5), 16) + ", " 
+					+ parseInt(current_point.color.slice(5, 7), 16) + ", " + current_point.opacity + ")";
 				image_context.fill();
+				
 				image_context.lineWidth = 5;
 				
 				// Sets color of the little border around the points
@@ -206,7 +209,7 @@ function first_layer_render_points(){
 					}
 					lines = current_point.annotation.split(/\r\n|\r|\n/);
 					var heightcalc = 12 * lines.length + 12;
-					image_context.fillStyle = "rgba(0, 0, 0, 0.75)";
+					image_context.fillStyle = "rgba(0, 0, 0, " + current_point.opacity + ")";
 					//image_context.strokeStyle = "rgba(0, 0, 0, 1.0)";
 					
 					var xstart;
