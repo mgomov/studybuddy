@@ -1,0 +1,460 @@
+\hypertarget{studybuddy_8js}{\section{C\-:/\-Users/\-Max/\-Documents/\-Git\-Hub/studybuddy/main/studybuddy/appdata/script/studybuddy.js File Reference}
+\label{studybuddy_8js}\index{C\-:/\-Users/\-Max/\-Documents/\-Git\-Hub/studybuddy/main/studybuddy/appdata/script/studybuddy.\-js@{C\-:/\-Users/\-Max/\-Documents/\-Git\-Hub/studybuddy/main/studybuddy/appdata/script/studybuddy.\-js}}
+}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+function \hyperlink{studybuddy_8js_a4be4055f3361d4800e16bc2e2e38cda6}{init} ()
+\begin{DoxyCompactList}\small\item\em Initializes the window width and heights properly. \end{DoxyCompactList}\item 
+\hyperlink{studybuddy_8js_a8ebfb5f57eddec670f4c499642920c3b}{render\-\_\-main\-\_\-screen} ()
+\item 
+\hyperlink{studybuddy_8js_ae425dbe38d321e116d0c3361290d97a0}{set\-Interval} (\hyperlink{studybuddy_8js_a8ebfb5f57eddec670f4c499642920c3b}{render\-\_\-main\-\_\-screen}, 20)
+\item 
+window \hyperlink{studybuddy_8js_acc612ad6927b87ef2c87a5f2c3cd0cae}{add\-Event\-Listener} ('resize', function(\hyperlink{input_8js_a44496511cf798ffcd9ca0740253067c3}{event})\{console.\-log(\char`\"{}Main window was resized\char`\"{});seek\-\_\-overlay\-\_\-context.\-fill\-Style=\char`\"{}\#000000\char`\"{};seek\-\_\-overlay\-\_\-context.\-fill\-Rect(0, 0, 2000, 2000);\hyperlink{studybuddy_8js_a4be4055f3361d4800e16bc2e2e38cda6}{init}();\})
+\item 
+function \hyperlink{studybuddy_8js_a007920d4bfd17aab12ea002c9496964a}{change\-\_\-volume} (slider\-\_\-vol)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+var \hyperlink{studybuddy_8js_a9721a992655f700bdc2e91ba68b71e26}{w} = window.\-inner\-Width
+\begin{DoxyCompactList}\small\item\em The height of the window that we can work with. \end{DoxyCompactList}\item 
+var \hyperlink{studybuddy_8js_a79fe0eb780a2a4b5543b4dddf8b6188a}{h} = window.\-inner\-Height
+\begin{DoxyCompactList}\small\item\em The width of the window we can work with. \end{DoxyCompactList}\item 
+var \hyperlink{studybuddy_8js_a34c1d113b3f96860da24d5c8244aeeb9}{master}
+\begin{DoxyCompactList}\small\item\em Reference to the master file(main.\-sb) for accessing the recordings. \end{DoxyCompactList}\item 
+var \hyperlink{studybuddy_8js_a3181ff5a9eafa79c6805b3db3d1efa0c}{recording}
+\begin{DoxyCompactList}\small\item\em Reference to the current recording that's loaded up. \end{DoxyCompactList}\item 
+var \hyperlink{studybuddy_8js_a7f28f93bba1617777e304a19b7a95e75}{current\-\_\-event}
+\begin{DoxyCompactList}\small\item\em The current event from the recording that is being displayed now (with annotations, etc) \end{DoxyCompactList}\item 
+var \hyperlink{studybuddy_8js_a6f5b7d49d6ffec7607a6ffdb212bcb5a}{audio} = \hyperlink{input_8js_a4c560a8ffb4ec3cc33546ec5e4876227}{document.\-get\-Element\-By\-Id}(\char`\"{}audio\-\_\-player\char`\"{})
+\begin{DoxyCompactList}\small\item\em The audio player which handles our audio. \end{DoxyCompactList}\item 
+var \hyperlink{studybuddy_8js_ae1231f85c569428a14b702b9efb7cd24}{image\-\_\-canvas} = \hyperlink{input_8js_a4c560a8ffb4ec3cc33546ec5e4876227}{document.\-get\-Element\-By\-Id}(\char`\"{}image\-\_\-canvas\char`\"{})
+\begin{DoxyCompactList}\small\item\em Image canvas that takes up the whole screen. \end{DoxyCompactList}\item 
+var \hyperlink{studybuddy_8js_ac27d3d4c5108b24928cc0dbc76b9ca08}{image\-\_\-context} = image\-\_\-canvas.\-get\-Context(\char`\"{}2d\char`\"{})
+\begin{DoxyCompactList}\small\item\em Image cavnas' context, for drawing to. \end{DoxyCompactList}\item 
+var \hyperlink{studybuddy_8js_a09f5970232ee3807b084abb66246744a}{event\-\_\-switched} = false
+\begin{DoxyCompactList}\small\item\em Boolean which tells if the event was switched and things need to be changed. \end{DoxyCompactList}\item 
+var \hyperlink{studybuddy_8js_a0b84bab5cae38be0e5a9fe57af3eddb2}{image\-\_\-updated} = false
+\begin{DoxyCompactList}\small\item\em Irrelevant now, needs to be removed from our current scheme. \end{DoxyCompactList}\item 
+var \hyperlink{studybuddy_8js_a32475a863f1a44b8abbd948b76260aae}{seek\-\_\-canvas} = \hyperlink{input_8js_a4c560a8ffb4ec3cc33546ec5e4876227}{document.\-get\-Element\-By\-Id}(\char`\"{}seek\-\_\-canvas\char`\"{})
+\begin{DoxyCompactList}\small\item\em The seek bar's discrete canvas that we draw all of the seek bar things to. \end{DoxyCompactList}\item 
+var \hyperlink{studybuddy_8js_ac82107c7a26e7246a5bcbad686f9086e}{seek\-\_\-context} = seek\-\_\-canvas.\-get\-Context(\char`\"{}2d\char`\"{})
+\begin{DoxyCompactList}\small\item\em Seek bar's context. \end{DoxyCompactList}\item 
+var \hyperlink{studybuddy_8js_aa2f70ac9b4f80b1eeb6cb4edb72751cf}{seek\-\_\-overlay\-\_\-canvas} = \hyperlink{input_8js_a4c560a8ffb4ec3cc33546ec5e4876227}{document.\-get\-Element\-By\-Id}(\char`\"{}seek\-\_\-overlay\-\_\-canvas\char`\"{})
+\begin{DoxyCompactList}\small\item\em Seek bar's overlay, where we draw things like the current time we're at and where images are. \end{DoxyCompactList}\item 
+var \hyperlink{studybuddy_8js_a91d10ef4dcd7e212fe3d17b3f60c2724}{seek\-\_\-overlay\-\_\-context} = seek\-\_\-overlay\-\_\-canvas.\-get\-Context(\char`\"{}2d\char`\"{})
+\begin{DoxyCompactList}\small\item\em Seek overlay's context. \end{DoxyCompactList}\item 
+var \hyperlink{studybuddy_8js_a51000456a0631ffb454c815aa07b078d}{play\-\_\-pause\-\_\-time} = 0
+\begin{DoxyCompactList}\small\item\em Var for controlling transparency for fading of the play/pause indicators. \end{DoxyCompactList}\item 
+var \hyperlink{studybuddy_8js_a25a924eab51bf9bddcdb67fff6f4ddb7}{drag} = false
+\begin{DoxyCompactList}\small\item\em Tells us if we're currently dragging a window... For input. \end{DoxyCompactList}\item 
+var \hyperlink{studybuddy_8js_addc1d281cba90af48a61491fb44a94fd}{delta} = 0
+\begin{DoxyCompactList}\small\item\em Delta of the current drag. \end{DoxyCompactList}\item 
+var \hyperlink{studybuddy_8js_a9a9151a4563383e798dd12db7ca0db6d}{justdragged} = false
+\begin{DoxyCompactList}\small\item\em Used for preventing click event after a drag. \end{DoxyCompactList}\item 
+var \hyperlink{studybuddy_8js_adb8e59f71b8e4f7286dc10d5a71a9817}{moving\-\_\-point}
+\begin{DoxyCompactList}\small\item\em The point we're dragging around the screen. \end{DoxyCompactList}\item 
+var \hyperlink{studybuddy_8js_af2e7dddfbf122829d0b8f36b1182bed2}{editing\-\_\-point} = false
+\begin{DoxyCompactList}\small\item\em Boolean that tells us if a variable is being edited. \end{DoxyCompactList}\item 
+var \hyperlink{studybuddy_8js_a917fd8654a741395c4c2f87a677e8ee2}{point\-\_\-ctx\-\_\-display} = false
+\begin{DoxyCompactList}\small\item\em Boolean telling us if we're displaying an editing menu for points. \end{DoxyCompactList}\item 
+var \hyperlink{studybuddy_8js_a15a2999274b16c48756b3f01271299fe}{point\-\_\-ctx} = \hyperlink{input_8js_a4c560a8ffb4ec3cc33546ec5e4876227}{document.\-get\-Element\-By\-Id}(\char`\"{}point\-\_\-context\-\_\-menu\char`\"{})
+\begin{DoxyCompactList}\small\item\em The editing menu for all points. \end{DoxyCompactList}\item 
+var \hyperlink{studybuddy_8js_a09d8bcae29a23f4ccdd4a32e0c7344ef}{\-\_\-\-T\-E\-M\-P\-F\-I\-L\-E\-S}
+\begin{DoxyCompactList}\small\item\em Temp var to pass files to main merge, D\-O N\-O\-T R\-E\-F\-E\-R\-E\-N\-C\-E outside of merge process. \end{DoxyCompactList}\item 
+var \hyperlink{studybuddy_8js_a017268e025d4e0e2d13dc1b31cce950b}{images} = new Array()
+\begin{DoxyCompactList}\small\item\em Array of images for the current recording. \end{DoxyCompactList}\item 
+var \hyperlink{studybuddy_8js_a05ba92691bb88651a28603f65775a31f}{seek\-\_\-draw} = false
+\begin{DoxyCompactList}\small\item\em Boolean telling us if we should be drawing the mouseover preview. \end{DoxyCompactList}\item 
+var \hyperlink{studybuddy_8js_a2468a4d4586e4eafca4ca4f517fafe00}{seek\-\_\-draw\-\_\-event}
+\begin{DoxyCompactList}\small\item\em The number of the event that we're previewing (in context of Recording\mbox{[}seek\-\_\-draw\-\_\-event\mbox{]}) \end{DoxyCompactList}\item 
+var \hyperlink{studybuddy_8js_acf3822fa32c40f5a23434fa809f62123}{seek\-\_\-draw\-\_\-x}
+\begin{DoxyCompactList}\small\item\em What we're mousing over in terms of x coordinates. \end{DoxyCompactList}\item 
+var \hyperlink{studybuddy_8js_a434b55e78571b4b98a88afa7a4ef9c84}{seek\-\_\-display} = false
+\begin{DoxyCompactList}\small\item\em Boolean that tells us if we're moused over the seek bar or not. \end{DoxyCompactList}\item 
+var \hyperlink{studybuddy_8js_acdd9a557a39b1a8f991c8e8f6105d495}{seek\-\_\-display\-\_\-opacity} = 1.\-0
+\begin{DoxyCompactList}\small\item\em Var for controlling transparency for fading of the seek bar. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{studybuddy_8js_acc612ad6927b87ef2c87a5f2c3cd0cae}{\index{studybuddy.\-js@{studybuddy.\-js}!add\-Event\-Listener@{add\-Event\-Listener}}
+\index{add\-Event\-Listener@{add\-Event\-Listener}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{add\-Event\-Listener}]{\setlength{\rightskip}{0pt plus 5cm}window add\-Event\-Listener (
+\begin{DoxyParamCaption}
+\item[{'resize'}]{, }
+\item[{function({\bf event})\{console.\-log(\char`\"{}Main window was resized\char`\"{});seek\-\_\-overlay\-\_\-context.\-fill\-Style=\char`\"{}\#000000\char`\"{};seek\-\_\-overlay\-\_\-context.\-fill\-Rect(0, 0, 2000, 2000);{\bf init}();\}}]{}
+\end{DoxyParamCaption}
+)}}\label{studybuddy_8js_acc612ad6927b87ef2c87a5f2c3cd0cae}
+\hypertarget{studybuddy_8js_a007920d4bfd17aab12ea002c9496964a}{\index{studybuddy.\-js@{studybuddy.\-js}!change\-\_\-volume@{change\-\_\-volume}}
+\index{change\-\_\-volume@{change\-\_\-volume}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{change\-\_\-volume}]{\setlength{\rightskip}{0pt plus 5cm}function change\-\_\-volume (
+\begin{DoxyParamCaption}
+\item[{}]{slider\-\_\-vol}
+\end{DoxyParamCaption}
+)}}\label{studybuddy_8js_a007920d4bfd17aab12ea002c9496964a}
+
+\begin{DoxyParams}{Parameters}
+{\em slider\-\_\-vol} & Param for the volume \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 94 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_a4be4055f3361d4800e16bc2e2e38cda6}{\index{studybuddy.\-js@{studybuddy.\-js}!init@{init}}
+\index{init@{init}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{init}]{\setlength{\rightskip}{0pt plus 5cm}init (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{studybuddy_8js_a4be4055f3361d4800e16bc2e2e38cda6}
+
+
+Initializes the window width and heights properly. 
+
+Called on startup and window resize. 
+
+Definition at line 55 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_a8ebfb5f57eddec670f4c499642920c3b}{\index{studybuddy.\-js@{studybuddy.\-js}!render\-\_\-main\-\_\-screen@{render\-\_\-main\-\_\-screen}}
+\index{render\-\_\-main\-\_\-screen@{render\-\_\-main\-\_\-screen}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{render\-\_\-main\-\_\-screen}]{\setlength{\rightskip}{0pt plus 5cm}render\-\_\-main\-\_\-screen (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{studybuddy_8js_a8ebfb5f57eddec670f4c499642920c3b}
+
+
+Definition at line 7 of file render.\-js.
+
+\hypertarget{studybuddy_8js_ae425dbe38d321e116d0c3361290d97a0}{\index{studybuddy.\-js@{studybuddy.\-js}!set\-Interval@{set\-Interval}}
+\index{set\-Interval@{set\-Interval}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{set\-Interval}]{\setlength{\rightskip}{0pt plus 5cm}set\-Interval (
+\begin{DoxyParamCaption}
+\item[{{\bf render\-\_\-main\-\_\-screen}}]{, }
+\item[{20}]{}
+\end{DoxyParamCaption}
+)}}\label{studybuddy_8js_ae425dbe38d321e116d0c3361290d97a0}
+
+
+\subsection{Variable Documentation}
+\hypertarget{studybuddy_8js_a09d8bcae29a23f4ccdd4a32e0c7344ef}{\index{studybuddy.\-js@{studybuddy.\-js}!\-\_\-\-T\-E\-M\-P\-F\-I\-L\-E\-S@{\-\_\-\-T\-E\-M\-P\-F\-I\-L\-E\-S}}
+\index{\-\_\-\-T\-E\-M\-P\-F\-I\-L\-E\-S@{\-\_\-\-T\-E\-M\-P\-F\-I\-L\-E\-S}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{\-\_\-\-T\-E\-M\-P\-F\-I\-L\-E\-S}]{\setlength{\rightskip}{0pt plus 5cm}var \-\_\-\-T\-E\-M\-P\-F\-I\-L\-E\-S}}\label{studybuddy_8js_a09d8bcae29a23f4ccdd4a32e0c7344ef}
+
+
+Temp var to pass files to main merge, D\-O N\-O\-T R\-E\-F\-E\-R\-E\-N\-C\-E outside of merge process. 
+
+
+
+Definition at line 41 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_a6f5b7d49d6ffec7607a6ffdb212bcb5a}{\index{studybuddy.\-js@{studybuddy.\-js}!audio@{audio}}
+\index{audio@{audio}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{audio}]{\setlength{\rightskip}{0pt plus 5cm}var audio = {\bf document.\-get\-Element\-By\-Id}(\char`\"{}audio\-\_\-player\char`\"{})}}\label{studybuddy_8js_a6f5b7d49d6ffec7607a6ffdb212bcb5a}
+
+
+The audio player which handles our audio. 
+
+
+
+Definition at line 14 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_a7f28f93bba1617777e304a19b7a95e75}{\index{studybuddy.\-js@{studybuddy.\-js}!current\-\_\-event@{current\-\_\-event}}
+\index{current\-\_\-event@{current\-\_\-event}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{current\-\_\-event}]{\setlength{\rightskip}{0pt plus 5cm}var current\-\_\-event}}\label{studybuddy_8js_a7f28f93bba1617777e304a19b7a95e75}
+
+
+The current event from the recording that is being displayed now (with annotations, etc) 
+
+
+
+Definition at line 12 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_addc1d281cba90af48a61491fb44a94fd}{\index{studybuddy.\-js@{studybuddy.\-js}!delta@{delta}}
+\index{delta@{delta}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{delta}]{\setlength{\rightskip}{0pt plus 5cm}var delta = 0}}\label{studybuddy_8js_addc1d281cba90af48a61491fb44a94fd}
+
+
+Delta of the current drag. 
+
+
+
+Definition at line 32 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_a25a924eab51bf9bddcdb67fff6f4ddb7}{\index{studybuddy.\-js@{studybuddy.\-js}!drag@{drag}}
+\index{drag@{drag}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{drag}]{\setlength{\rightskip}{0pt plus 5cm}var drag = false}}\label{studybuddy_8js_a25a924eab51bf9bddcdb67fff6f4ddb7}
+
+
+Tells us if we're currently dragging a window... For input. 
+
+
+
+Definition at line 31 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_af2e7dddfbf122829d0b8f36b1182bed2}{\index{studybuddy.\-js@{studybuddy.\-js}!editing\-\_\-point@{editing\-\_\-point}}
+\index{editing\-\_\-point@{editing\-\_\-point}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{editing\-\_\-point}]{\setlength{\rightskip}{0pt plus 5cm}var editing\-\_\-point = false}}\label{studybuddy_8js_af2e7dddfbf122829d0b8f36b1182bed2}
+
+
+Boolean that tells us if a variable is being edited. 
+
+
+
+Definition at line 36 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_a09f5970232ee3807b084abb66246744a}{\index{studybuddy.\-js@{studybuddy.\-js}!event\-\_\-switched@{event\-\_\-switched}}
+\index{event\-\_\-switched@{event\-\_\-switched}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{event\-\_\-switched}]{\setlength{\rightskip}{0pt plus 5cm}var event\-\_\-switched = false}}\label{studybuddy_8js_a09f5970232ee3807b084abb66246744a}
+
+
+Boolean which tells if the event was switched and things need to be changed. 
+
+
+
+Definition at line 19 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_a79fe0eb780a2a4b5543b4dddf8b6188a}{\index{studybuddy.\-js@{studybuddy.\-js}!h@{h}}
+\index{h@{h}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{h}]{\setlength{\rightskip}{0pt plus 5cm}var h = window.\-inner\-Height}}\label{studybuddy_8js_a79fe0eb780a2a4b5543b4dddf8b6188a}
+
+
+The width of the window we can work with. 
+
+
+
+Definition at line 6 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_ae1231f85c569428a14b702b9efb7cd24}{\index{studybuddy.\-js@{studybuddy.\-js}!image\-\_\-canvas@{image\-\_\-canvas}}
+\index{image\-\_\-canvas@{image\-\_\-canvas}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{image\-\_\-canvas}]{\setlength{\rightskip}{0pt plus 5cm}var image\-\_\-canvas = {\bf document.\-get\-Element\-By\-Id}(\char`\"{}image\-\_\-canvas\char`\"{})}}\label{studybuddy_8js_ae1231f85c569428a14b702b9efb7cd24}
+
+
+Image canvas that takes up the whole screen. 
+
+
+
+Definition at line 16 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_ac27d3d4c5108b24928cc0dbc76b9ca08}{\index{studybuddy.\-js@{studybuddy.\-js}!image\-\_\-context@{image\-\_\-context}}
+\index{image\-\_\-context@{image\-\_\-context}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{image\-\_\-context}]{\setlength{\rightskip}{0pt plus 5cm}var image\-\_\-context = image\-\_\-canvas.\-get\-Context(\char`\"{}2d\char`\"{})}}\label{studybuddy_8js_ac27d3d4c5108b24928cc0dbc76b9ca08}
+
+
+Image cavnas' context, for drawing to. 
+
+
+
+Definition at line 17 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_a0b84bab5cae38be0e5a9fe57af3eddb2}{\index{studybuddy.\-js@{studybuddy.\-js}!image\-\_\-updated@{image\-\_\-updated}}
+\index{image\-\_\-updated@{image\-\_\-updated}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{image\-\_\-updated}]{\setlength{\rightskip}{0pt plus 5cm}var image\-\_\-updated = false}}\label{studybuddy_8js_a0b84bab5cae38be0e5a9fe57af3eddb2}
+
+
+Irrelevant now, needs to be removed from our current scheme. 
+
+
+
+Definition at line 21 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_a017268e025d4e0e2d13dc1b31cce950b}{\index{studybuddy.\-js@{studybuddy.\-js}!images@{images}}
+\index{images@{images}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{images}]{\setlength{\rightskip}{0pt plus 5cm}var images = new Array()}}\label{studybuddy_8js_a017268e025d4e0e2d13dc1b31cce950b}
+
+
+Array of images for the current recording. 
+
+
+
+Definition at line 43 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_a9a9151a4563383e798dd12db7ca0db6d}{\index{studybuddy.\-js@{studybuddy.\-js}!justdragged@{justdragged}}
+\index{justdragged@{justdragged}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{justdragged}]{\setlength{\rightskip}{0pt plus 5cm}var justdragged = false}}\label{studybuddy_8js_a9a9151a4563383e798dd12db7ca0db6d}
+
+
+Used for preventing click event after a drag. 
+
+
+
+Definition at line 33 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_a34c1d113b3f96860da24d5c8244aeeb9}{\index{studybuddy.\-js@{studybuddy.\-js}!master@{master}}
+\index{master@{master}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{master}]{\setlength{\rightskip}{0pt plus 5cm}var master}}\label{studybuddy_8js_a34c1d113b3f96860da24d5c8244aeeb9}
+
+
+Reference to the master file(main.\-sb) for accessing the recordings. 
+
+
+
+Definition at line 8 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_adb8e59f71b8e4f7286dc10d5a71a9817}{\index{studybuddy.\-js@{studybuddy.\-js}!moving\-\_\-point@{moving\-\_\-point}}
+\index{moving\-\_\-point@{moving\-\_\-point}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{moving\-\_\-point}]{\setlength{\rightskip}{0pt plus 5cm}var moving\-\_\-point}}\label{studybuddy_8js_adb8e59f71b8e4f7286dc10d5a71a9817}
+
+
+The point we're dragging around the screen. 
+
+
+
+Definition at line 34 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_a51000456a0631ffb454c815aa07b078d}{\index{studybuddy.\-js@{studybuddy.\-js}!play\-\_\-pause\-\_\-time@{play\-\_\-pause\-\_\-time}}
+\index{play\-\_\-pause\-\_\-time@{play\-\_\-pause\-\_\-time}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{play\-\_\-pause\-\_\-time}]{\setlength{\rightskip}{0pt plus 5cm}var play\-\_\-pause\-\_\-time = 0}}\label{studybuddy_8js_a51000456a0631ffb454c815aa07b078d}
+
+
+Var for controlling transparency for fading of the play/pause indicators. 
+
+
+
+Definition at line 29 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_a15a2999274b16c48756b3f01271299fe}{\index{studybuddy.\-js@{studybuddy.\-js}!point\-\_\-ctx@{point\-\_\-ctx}}
+\index{point\-\_\-ctx@{point\-\_\-ctx}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{point\-\_\-ctx}]{\setlength{\rightskip}{0pt plus 5cm}var point\-\_\-ctx = {\bf document.\-get\-Element\-By\-Id}(\char`\"{}point\-\_\-context\-\_\-menu\char`\"{})}}\label{studybuddy_8js_a15a2999274b16c48756b3f01271299fe}
+
+
+The editing menu for all points. 
+
+
+
+Definition at line 39 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_a917fd8654a741395c4c2f87a677e8ee2}{\index{studybuddy.\-js@{studybuddy.\-js}!point\-\_\-ctx\-\_\-display@{point\-\_\-ctx\-\_\-display}}
+\index{point\-\_\-ctx\-\_\-display@{point\-\_\-ctx\-\_\-display}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{point\-\_\-ctx\-\_\-display}]{\setlength{\rightskip}{0pt plus 5cm}var point\-\_\-ctx\-\_\-display = false}}\label{studybuddy_8js_a917fd8654a741395c4c2f87a677e8ee2}
+
+
+Boolean telling us if we're displaying an editing menu for points. 
+
+
+
+Definition at line 38 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_a3181ff5a9eafa79c6805b3db3d1efa0c}{\index{studybuddy.\-js@{studybuddy.\-js}!recording@{recording}}
+\index{recording@{recording}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{recording}]{\setlength{\rightskip}{0pt plus 5cm}var recording}}\label{studybuddy_8js_a3181ff5a9eafa79c6805b3db3d1efa0c}
+
+
+Reference to the current recording that's loaded up. 
+
+
+
+Definition at line 10 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_a32475a863f1a44b8abbd948b76260aae}{\index{studybuddy.\-js@{studybuddy.\-js}!seek\-\_\-canvas@{seek\-\_\-canvas}}
+\index{seek\-\_\-canvas@{seek\-\_\-canvas}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{seek\-\_\-canvas}]{\setlength{\rightskip}{0pt plus 5cm}var seek\-\_\-canvas = {\bf document.\-get\-Element\-By\-Id}(\char`\"{}seek\-\_\-canvas\char`\"{})}}\label{studybuddy_8js_a32475a863f1a44b8abbd948b76260aae}
+
+
+The seek bar's discrete canvas that we draw all of the seek bar things to. 
+
+
+
+Definition at line 23 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_ac82107c7a26e7246a5bcbad686f9086e}{\index{studybuddy.\-js@{studybuddy.\-js}!seek\-\_\-context@{seek\-\_\-context}}
+\index{seek\-\_\-context@{seek\-\_\-context}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{seek\-\_\-context}]{\setlength{\rightskip}{0pt plus 5cm}var seek\-\_\-context = seek\-\_\-canvas.\-get\-Context(\char`\"{}2d\char`\"{})}}\label{studybuddy_8js_ac82107c7a26e7246a5bcbad686f9086e}
+
+
+Seek bar's context. 
+
+
+
+Definition at line 24 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_a434b55e78571b4b98a88afa7a4ef9c84}{\index{studybuddy.\-js@{studybuddy.\-js}!seek\-\_\-display@{seek\-\_\-display}}
+\index{seek\-\_\-display@{seek\-\_\-display}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{seek\-\_\-display}]{\setlength{\rightskip}{0pt plus 5cm}var seek\-\_\-display = false}}\label{studybuddy_8js_a434b55e78571b4b98a88afa7a4ef9c84}
+
+
+Boolean that tells us if we're moused over the seek bar or not. 
+
+
+
+Definition at line 48 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_acdd9a557a39b1a8f991c8e8f6105d495}{\index{studybuddy.\-js@{studybuddy.\-js}!seek\-\_\-display\-\_\-opacity@{seek\-\_\-display\-\_\-opacity}}
+\index{seek\-\_\-display\-\_\-opacity@{seek\-\_\-display\-\_\-opacity}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{seek\-\_\-display\-\_\-opacity}]{\setlength{\rightskip}{0pt plus 5cm}var seek\-\_\-display\-\_\-opacity = 1.\-0}}\label{studybuddy_8js_acdd9a557a39b1a8f991c8e8f6105d495}
+
+
+Var for controlling transparency for fading of the seek bar. 
+
+
+
+Definition at line 50 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_a05ba92691bb88651a28603f65775a31f}{\index{studybuddy.\-js@{studybuddy.\-js}!seek\-\_\-draw@{seek\-\_\-draw}}
+\index{seek\-\_\-draw@{seek\-\_\-draw}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{seek\-\_\-draw}]{\setlength{\rightskip}{0pt plus 5cm}var seek\-\_\-draw = false}}\label{studybuddy_8js_a05ba92691bb88651a28603f65775a31f}
+
+
+Boolean telling us if we should be drawing the mouseover preview. 
+
+
+
+Definition at line 44 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_a2468a4d4586e4eafca4ca4f517fafe00}{\index{studybuddy.\-js@{studybuddy.\-js}!seek\-\_\-draw\-\_\-event@{seek\-\_\-draw\-\_\-event}}
+\index{seek\-\_\-draw\-\_\-event@{seek\-\_\-draw\-\_\-event}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{seek\-\_\-draw\-\_\-event}]{\setlength{\rightskip}{0pt plus 5cm}var seek\-\_\-draw\-\_\-event}}\label{studybuddy_8js_a2468a4d4586e4eafca4ca4f517fafe00}
+
+
+The number of the event that we're previewing (in context of Recording\mbox{[}seek\-\_\-draw\-\_\-event\mbox{]}) 
+
+
+
+Definition at line 45 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_acf3822fa32c40f5a23434fa809f62123}{\index{studybuddy.\-js@{studybuddy.\-js}!seek\-\_\-draw\-\_\-x@{seek\-\_\-draw\-\_\-x}}
+\index{seek\-\_\-draw\-\_\-x@{seek\-\_\-draw\-\_\-x}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{seek\-\_\-draw\-\_\-x}]{\setlength{\rightskip}{0pt plus 5cm}var seek\-\_\-draw\-\_\-x}}\label{studybuddy_8js_acf3822fa32c40f5a23434fa809f62123}
+
+
+What we're mousing over in terms of x coordinates. 
+
+
+
+Definition at line 46 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_aa2f70ac9b4f80b1eeb6cb4edb72751cf}{\index{studybuddy.\-js@{studybuddy.\-js}!seek\-\_\-overlay\-\_\-canvas@{seek\-\_\-overlay\-\_\-canvas}}
+\index{seek\-\_\-overlay\-\_\-canvas@{seek\-\_\-overlay\-\_\-canvas}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{seek\-\_\-overlay\-\_\-canvas}]{\setlength{\rightskip}{0pt plus 5cm}var seek\-\_\-overlay\-\_\-canvas = {\bf document.\-get\-Element\-By\-Id}(\char`\"{}seek\-\_\-overlay\-\_\-canvas\char`\"{})}}\label{studybuddy_8js_aa2f70ac9b4f80b1eeb6cb4edb72751cf}
+
+
+Seek bar's overlay, where we draw things like the current time we're at and where images are. 
+
+
+
+Definition at line 26 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_a91d10ef4dcd7e212fe3d17b3f60c2724}{\index{studybuddy.\-js@{studybuddy.\-js}!seek\-\_\-overlay\-\_\-context@{seek\-\_\-overlay\-\_\-context}}
+\index{seek\-\_\-overlay\-\_\-context@{seek\-\_\-overlay\-\_\-context}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{seek\-\_\-overlay\-\_\-context}]{\setlength{\rightskip}{0pt plus 5cm}var seek\-\_\-overlay\-\_\-context = seek\-\_\-overlay\-\_\-canvas.\-get\-Context(\char`\"{}2d\char`\"{})}}\label{studybuddy_8js_a91d10ef4dcd7e212fe3d17b3f60c2724}
+
+
+Seek overlay's context. 
+
+
+
+Definition at line 27 of file studybuddy.\-js.
+
+\hypertarget{studybuddy_8js_a9721a992655f700bdc2e91ba68b71e26}{\index{studybuddy.\-js@{studybuddy.\-js}!w@{w}}
+\index{w@{w}!studybuddy.js@{studybuddy.\-js}}
+\subsubsection[{w}]{\setlength{\rightskip}{0pt plus 5cm}var w = window.\-inner\-Width}}\label{studybuddy_8js_a9721a992655f700bdc2e91ba68b71e26}
+
+
+The height of the window that we can work with. 
+
+
+
+Definition at line 5 of file studybuddy.\-js.
+

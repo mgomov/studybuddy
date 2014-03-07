@@ -1,0 +1,138 @@
+\hypertarget{input_8js}{\section{C\-:/\-Users/\-Max/\-Documents/\-Git\-Hub/studybuddy/main/studybuddy/appdata/script/input.js File Reference}
+\label{input_8js}\index{C\-:/\-Users/\-Max/\-Documents/\-Git\-Hub/studybuddy/main/studybuddy/appdata/script/input.\-js@{C\-:/\-Users/\-Max/\-Documents/\-Git\-Hub/studybuddy/main/studybuddy/appdata/script/input.\-js}}
+}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+document \hyperlink{input_8js_a4c560a8ffb4ec3cc33546ec5e4876227}{get\-Element\-By\-Id} (\char`\"{}point\-\_\-annotation\-\_\-edit\char`\"{}).add\-Event\-Listener('input'
+\item 
+\hyperlink{studybuddy_8js_ae1231f85c569428a14b702b9efb7cd24}{image\-\_\-canvas} \hyperlink{input_8js_ad0579b3bb1b2e65e1d8c69bfbe998b50}{add\-Event\-Listener} ('mousemove', function(\hyperlink{input_8js_a44496511cf798ffcd9ca0740253067c3}{event})\{if(\hyperlink{studybuddy_8js_a25a924eab51bf9bddcdb67fff6f4ddb7}{drag})\{\hyperlink{studybuddy_8js_addc1d281cba90af48a61491fb44a94fd}{delta}++;if(\hyperlink{studybuddy_8js_addc1d281cba90af48a61491fb44a94fd}{delta} $>$ 2)\{\hyperlink{studybuddy_8js_a9a9151a4563383e798dd12db7ca0db6d}{justdragged}=true;if(!\hyperlink{studybuddy_8js_adb8e59f71b8e4f7286dc10d5a71a9817}{moving\-\_\-point})\{var x=event.\-page\-X-\/image\-\_\-canvas.\-offset\-Left;var y=event.\-page\-Y-\/image\-\_\-canvas.\-offset\-Top;if(\hyperlink{studybuddy_8js_a7f28f93bba1617777e304a19b7a95e75}{current\-\_\-event}$<$ 0)\{return;\}for(var i=0;i$<$ recording.\-Events\mbox{[}\hyperlink{studybuddy_8js_a7f28f93bba1617777e304a19b7a95e75}{current\-\_\-event}\mbox{]}.Points.\-length;i++)\{var a\-\_\-point=recording.\-Events\mbox{[}\hyperlink{studybuddy_8js_a7f28f93bba1617777e304a19b7a95e75}{current\-\_\-event}\mbox{]}.Points\mbox{[}i\mbox{]};if(x $>$=a\-\_\-point.\-x-\/10 \&\&x$<$=a\-\_\-point.\-x+10)\{if(y $>$=a\-\_\-point.\-y-\/10 \&\&y$<$=a\-\_\-point.\-y+10)\{\hyperlink{studybuddy_8js_adb8e59f71b8e4f7286dc10d5a71a9817}{moving\-\_\-point}=recording.\-Events\mbox{[}\hyperlink{studybuddy_8js_a7f28f93bba1617777e304a19b7a95e75}{current\-\_\-event}\mbox{]}.Points\mbox{[}i\mbox{]};\}\}\}\}if(!\hyperlink{studybuddy_8js_adb8e59f71b8e4f7286dc10d5a71a9817}{moving\-\_\-point}$\vert$$\vert$moving\-\_\-point.\-locked)\{return;\}moving\-\_\-point.\-x=event.\-client\-X;moving\-\_\-point.\-y=event.\-client\-Y;\}\}else\{var x=event.\-client\-X;var y=event.\-client\-Y;if(y $>$(image\-\_\-canvas.\-height-\/1/6 $\ast$image\-\_\-canvas.\-height))\{\hyperlink{studybuddy_8js_a434b55e78571b4b98a88afa7a4ef9c84}{seek\-\_\-display}=true;\}else\{\hyperlink{studybuddy_8js_a434b55e78571b4b98a88afa7a4ef9c84}{seek\-\_\-display}=false;\}if(seek\-\_\-canvas.\-relative\-X$<$=x \&\&x$<$=seek\-\_\-canvas.\-relative\-X+seek\-\_\-canvas.\-width \&\&seek\-\_\-canvas.\-relative\-Y$<$=y \&\&y$<$=seek\-\_\-canvas.\-relative\-Y+seek\-\_\-canvas.\-height \&\&\hyperlink{studybuddy_8js_a3181ff5a9eafa79c6805b3db3d1efa0c}{recording})\{x=event.\-client\-X-\/seek\-\_\-canvas.\-relative\-X;y=event.\-client\-Y-\/seek\-\_\-canvas.\-relative\-Y;var mo\-\_\-event=\hyperlink{events_8js_a5977cc550b445532e2ee003422e6dc64}{get\-\_\-event}((x/(seek\-\_\-canvas.\-width-\/15))$\ast$audio.\-duration);\hyperlink{studybuddy_8js_a05ba92691bb88651a28603f65775a31f}{seek\-\_\-draw}=true;\hyperlink{studybuddy_8js_a2468a4d4586e4eafca4ca4f517fafe00}{seek\-\_\-draw\-\_\-event}=mo\-\_\-event;\hyperlink{studybuddy_8js_acf3822fa32c40f5a23434fa809f62123}{seek\-\_\-draw\-\_\-x}=event.\-client\-X;\}else\{\hyperlink{studybuddy_8js_a05ba92691bb88651a28603f65775a31f}{seek\-\_\-draw}=false;\}\}\})
+\item 
+\hyperlink{studybuddy_8js_ae1231f85c569428a14b702b9efb7cd24}{image\-\_\-canvas} \hyperlink{input_8js_a2591d0ef368c868ebb6dd7c04404ecfb}{add\-Event\-Listener} ('click', function(\hyperlink{input_8js_a44496511cf798ffcd9ca0740253067c3}{event})\{if(\hyperlink{studybuddy_8js_af2e7dddfbf122829d0b8f36b1182bed2}{editing\-\_\-point})\{\hyperlink{studybuddy_8js_af2e7dddfbf122829d0b8f36b1182bed2}{editing\-\_\-point}=false;\hyperlink{input_8js_a4c560a8ffb4ec3cc33546ec5e4876227}{document.\-get\-Element\-By\-Id}(\char`\"{}point\-\_\-annotation\-\_\-div\char`\"{}).style.\-display=\char`\"{}none\char`\"{};document.\-get\-Element\-By\-Id(\char`\"{}point\-\_\-annotation\-\_\-div\char`\"{}).current\-\_\-point=undefined;return;\}if(\hyperlink{studybuddy_8js_a9a9151a4563383e798dd12db7ca0db6d}{justdragged})\{\hyperlink{studybuddy_8js_a9a9151a4563383e798dd12db7ca0db6d}{justdragged}=false;return;\}\hyperlink{studybuddy_8js_a917fd8654a741395c4c2f87a677e8ee2}{point\-\_\-ctx\-\_\-display}=false;point\-\_\-ctx.\-style.\-display=\char`\"{}none\char`\"{};var x=event.\-page\-X-\/image\-\_\-canvas.\-offset\-Left;var y=event.\-page\-Y-\/image\-\_\-canvas.\-offset\-Top;if(!\hyperlink{studybuddy_8js_a3181ff5a9eafa79c6805b3db3d1efa0c}{recording})\{return;\}if(seek\-\_\-canvas.\-relative\-X$<$=x \&\&x$<$=seek\-\_\-canvas.\-relative\-X+seek\-\_\-canvas.\-width \&\&seek\-\_\-canvas.\-relative\-Y$<$=y \&\&y$<$=seek\-\_\-canvas.\-relative\-Y+seek\-\_\-canvas.\-height)\{console.\-log(\char`\"{}Clicked the seek bar at (\char`\"{}+x+\char`\"{}, \char`\"{}+y+\char`\"{}).\char`\"{});audio.\-current\-Time=\hyperlink{events_8js_a1fad1ac10070146eb4c45093a552b168}{seek\-\_\-calculate}(x);\}else\{if(\hyperlink{studybuddy_8js_a7f28f93bba1617777e304a19b7a95e75}{current\-\_\-event} $>$=0)\{for(var i=0;i$<$ recording.\-Events\mbox{[}\hyperlink{studybuddy_8js_a7f28f93bba1617777e304a19b7a95e75}{current\-\_\-event}\mbox{]}.Points.\-length;i++)\{var current\-\_\-point=recording.\-Events\mbox{[}\hyperlink{studybuddy_8js_a7f28f93bba1617777e304a19b7a95e75}{current\-\_\-event}\mbox{]}.Points\mbox{[}i\mbox{]};if(x $>$=current\-\_\-point.\-x-\/10 \&\&x$<$=current\-\_\-point.\-x+10)\{if(y $>$=current\-\_\-point.\-y-\/10 \&\&y$<$=current\-\_\-point.\-y+10)\{console.\-log(\char`\"{}Flipping a point's active state...\char`\"{});recording.\-Events\mbox{[}\hyperlink{studybuddy_8js_a7f28f93bba1617777e304a19b7a95e75}{current\-\_\-event}\mbox{]}.Points\mbox{[}i\mbox{]}.active=!(recording.\-Events\mbox{[}\hyperlink{studybuddy_8js_a7f28f93bba1617777e304a19b7a95e75}{current\-\_\-event}\mbox{]}.Points\mbox{[}i\mbox{]}.active);return;\}\}lines=current\-\_\-point.\-annotation.\-split(/\textbackslash{}r\textbackslash{}n$\vert$\textbackslash{}r$\vert$\textbackslash{}n/);var heightcalc=12 $\ast$lines.\-length+12;var xstart;var ystart;if(current\-\_\-point.\-x+current\-\_\-point.\-width $>$ image\-\_\-canvas.\-width$\vert$$\vert$current\-\_\-point.\-orientation==2$\vert$$\vert$current\-\_\-point.\-orientation==3)\{xstart=current\-\_\-point.\-x-\/current\-\_\-point.\-width;\}else\{xstart=current\-\_\-point.\-x;\}if(current\-\_\-point.\-y+heightcalc $>$ image\-\_\-canvas.\-height$\vert$$\vert$current\-\_\-point.\-orientation==1$\vert$$\vert$current\-\_\-point.\-orientation==2)\{ystart=current\-\_\-point.\-y-\/heightcalc;\}else\{ystart=current\-\_\-point.\-y;\}if(current\-\_\-point.\-active)\{if(x $>$=xstart \&\&x$<$=xstart+current\-\_\-point.\-width)\{if(y $>$=ystart \&\&y$<$=ystart+heightcalc)\{\hyperlink{studybuddy_8js_af2e7dddfbf122829d0b8f36b1182bed2}{editing\-\_\-point}=true;var elem=\hyperlink{input_8js_a4c560a8ffb4ec3cc33546ec5e4876227}{document.\-get\-Element\-By\-Id}(\char`\"{}point\-\_\-annotation\-\_\-div\char`\"{});var elem2=\hyperlink{input_8js_a4c560a8ffb4ec3cc33546ec5e4876227}{document.\-get\-Element\-By\-Id}(\char`\"{}point\-\_\-annotation\-\_\-edit\char`\"{});elem2.\-value=current\-\_\-point.\-annotation;elem.\-style.\-display=\char`\"{}block\char`\"{};elem.\-style.\-left=xstart+\char`\"{}px\char`\"{};elem.\-style.\-top=ystart+\char`\"{}px\char`\"{};elem.\-current\-\_\-point=current\-\_\-point;return;\}\}\}\}\}console.\-log(\char`\"{}Clicked the main canvas at (\char`\"{}+x+\char`\"{}, \char`\"{}+y+\char`\"{}).\char`\"{});if(audio.\-paused)\{audio.\-play();\hyperlink{studybuddy_8js_a51000456a0631ffb454c815aa07b078d}{play\-\_\-pause\-\_\-time}=3;\}else\{audio.\-pause();\hyperlink{studybuddy_8js_a51000456a0631ffb454c815aa07b078d}{play\-\_\-pause\-\_\-time}=3;\}\}\}, false)
+\item 
+function \hyperlink{input_8js_aa027faccc7604ccc940ce68ebaab80bd}{point\-\_\-display\-\_\-options} (elem)
+\item 
+function \hyperlink{input_8js_a0ac4b6e51f4163beb91e522c38920a02}{delete\-\_\-point} (elem)
+\item 
+function \hyperlink{input_8js_a8b9746072c98c25b9894f37fabc2e2cb}{point\-\_\-change\-\_\-opacity} (elem)
+\item 
+function \hyperlink{input_8js_a82785636d1eb5b2b3575ae01b5a4dffc}{point\-\_\-change\-\_\-color} (elem)
+\item 
+function \hyperlink{input_8js_a37bc5f46598885d622fdc7acd2114593}{point\-\_\-set\-\_\-lock} (elem)
+\item 
+function \hyperlink{input_8js_ae3d45000328a7a3cf05c97521a74bb63}{point\-\_\-orientation} (elem)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+function \hyperlink{input_8js_a44496511cf798ffcd9ca0740253067c3}{event}
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{input_8js_ad0579b3bb1b2e65e1d8c69bfbe998b50}{\index{input.\-js@{input.\-js}!add\-Event\-Listener@{add\-Event\-Listener}}
+\index{add\-Event\-Listener@{add\-Event\-Listener}!input.js@{input.\-js}}
+\subsubsection[{add\-Event\-Listener}]{\setlength{\rightskip}{0pt plus 5cm}{\bf image\-\_\-canvas} add\-Event\-Listener (
+\begin{DoxyParamCaption}
+\item[{'mousemove'}]{, }
+\item[{function({\bf event})\{if({\bf drag})\{{\bf delta}++;if({\bf delta} $>$ 2)\{{\bf justdragged}=true;if(!{\bf moving\-\_\-point})\{var x=event.\-page\-X-\/image\-\_\-canvas.\-offset\-Left;var y=event.\-page\-Y-\/image\-\_\-canvas.\-offset\-Top;if({\bf current\-\_\-event}$<$ 0)\{return;\}for(var i=0;i$<$ recording.\-Events\mbox{[}{\bf current\-\_\-event}\mbox{]}.Points.\-length;i++)\{var a\-\_\-point=recording.\-Events\mbox{[}{\bf current\-\_\-event}\mbox{]}.Points\mbox{[}i\mbox{]};if(x $>$=a\-\_\-point.\-x-\/10 \&\&x$<$=a\-\_\-point.\-x+10)\{if(y $>$=a\-\_\-point.\-y-\/10 \&\&y$<$=a\-\_\-point.\-y+10)\{{\bf moving\-\_\-point}=recording.\-Events\mbox{[}{\bf current\-\_\-event}\mbox{]}.Points\mbox{[}i\mbox{]};\}\}\}\}if(!{\bf moving\-\_\-point}$\vert$$\vert$moving\-\_\-point.\-locked)\{return;\}moving\-\_\-point.\-x=event.\-client\-X;moving\-\_\-point.\-y=event.\-client\-Y;\}\}else\{var x=event.\-client\-X;var y=event.\-client\-Y;if(y $>$(image\-\_\-canvas.\-height-\/1/6 $\ast$image\-\_\-canvas.\-height))\{{\bf seek\-\_\-display}=true;\}else\{{\bf seek\-\_\-display}=false;\}if(seek\-\_\-canvas.\-relative\-X$<$=x \&\&x$<$=seek\-\_\-canvas.\-relative\-X+seek\-\_\-canvas.\-width \&\&seek\-\_\-canvas.\-relative\-Y$<$=y \&\&y$<$=seek\-\_\-canvas.\-relative\-Y+seek\-\_\-canvas.\-height \&\&{\bf recording})\{x=event.\-client\-X-\/seek\-\_\-canvas.\-relative\-X;y=event.\-client\-Y-\/seek\-\_\-canvas.\-relative\-Y;var mo\-\_\-event={\bf get\-\_\-event}((x/(seek\-\_\-canvas.\-width-\/15))$\ast$audio.\-duration);{\bf seek\-\_\-draw}=true;{\bf seek\-\_\-draw\-\_\-event}=mo\-\_\-event;{\bf seek\-\_\-draw\-\_\-x}=event.\-client\-X;\}else\{{\bf seek\-\_\-draw}=false;\}\}\}}]{}
+\end{DoxyParamCaption}
+)}}\label{input_8js_ad0579b3bb1b2e65e1d8c69bfbe998b50}
+\hypertarget{input_8js_a2591d0ef368c868ebb6dd7c04404ecfb}{\index{input.\-js@{input.\-js}!add\-Event\-Listener@{add\-Event\-Listener}}
+\index{add\-Event\-Listener@{add\-Event\-Listener}!input.js@{input.\-js}}
+\subsubsection[{add\-Event\-Listener}]{\setlength{\rightskip}{0pt plus 5cm}{\bf image\-\_\-canvas} add\-Event\-Listener (
+\begin{DoxyParamCaption}
+\item[{'click'}]{, }
+\item[{function({\bf event})\{if({\bf editing\-\_\-point})\{{\bf editing\-\_\-point}=false;{\bf document.\-get\-Element\-By\-Id}(\char`\"{}point\-\_\-annotation\-\_\-div\char`\"{}).style.\-display=\char`\"{}none\char`\"{};document.\-get\-Element\-By\-Id(\char`\"{}point\-\_\-annotation\-\_\-div\char`\"{}).current\-\_\-point=undefined;return;\}if({\bf justdragged})\{{\bf justdragged}=false;return;\}{\bf point\-\_\-ctx\-\_\-display}=false;point\-\_\-ctx.\-style.\-display=\char`\"{}none\char`\"{};var x=event.\-page\-X-\/image\-\_\-canvas.\-offset\-Left;var y=event.\-page\-Y-\/image\-\_\-canvas.\-offset\-Top;if(!{\bf recording})\{return;\}if(seek\-\_\-canvas.\-relative\-X$<$=x \&\&x$<$=seek\-\_\-canvas.\-relative\-X+seek\-\_\-canvas.\-width \&\&seek\-\_\-canvas.\-relative\-Y$<$=y \&\&y$<$=seek\-\_\-canvas.\-relative\-Y+seek\-\_\-canvas.\-height)\{console.\-log(\char`\"{}Clicked the seek bar at (\char`\"{}+x+\char`\"{}, \char`\"{}+y+\char`\"{}).\char`\"{});audio.\-current\-Time={\bf seek\-\_\-calculate}(x);\}else\{if({\bf current\-\_\-event} $>$=0)\{for(var i=0;i$<$ recording.\-Events\mbox{[}{\bf current\-\_\-event}\mbox{]}.Points.\-length;i++)\{var current\-\_\-point=recording.\-Events\mbox{[}{\bf current\-\_\-event}\mbox{]}.Points\mbox{[}i\mbox{]};if(x $>$=current\-\_\-point.\-x-\/10 \&\&x$<$=current\-\_\-point.\-x+10)\{if(y $>$=current\-\_\-point.\-y-\/10 \&\&y$<$=current\-\_\-point.\-y+10)\{console.\-log(\char`\"{}Flipping a point's active state...\char`\"{});recording.\-Events\mbox{[}{\bf current\-\_\-event}\mbox{]}.Points\mbox{[}i\mbox{]}.active=!(recording.\-Events\mbox{[}{\bf current\-\_\-event}\mbox{]}.Points\mbox{[}i\mbox{]}.active);return;\}\}lines=current\-\_\-point.\-annotation.\-split(/\textbackslash{}r\textbackslash{}n$\vert$\textbackslash{}r$\vert$\textbackslash{}n/);var heightcalc=12 $\ast$lines.\-length+12;var xstart;var ystart;if(current\-\_\-point.\-x+current\-\_\-point.\-width $>$ image\-\_\-canvas.\-width$\vert$$\vert$current\-\_\-point.\-orientation==2$\vert$$\vert$current\-\_\-point.\-orientation==3)\{xstart=current\-\_\-point.\-x-\/current\-\_\-point.\-width;\}else\{xstart=current\-\_\-point.\-x;\}if(current\-\_\-point.\-y+heightcalc $>$ image\-\_\-canvas.\-height$\vert$$\vert$current\-\_\-point.\-orientation==1$\vert$$\vert$current\-\_\-point.\-orientation==2)\{ystart=current\-\_\-point.\-y-\/heightcalc;\}else\{ystart=current\-\_\-point.\-y;\}if(current\-\_\-point.\-active)\{if(x $>$=xstart \&\&x$<$=xstart+current\-\_\-point.\-width)\{if(y $>$=ystart \&\&y$<$=ystart+heightcalc)\{{\bf editing\-\_\-point}=true;var elem={\bf document.\-get\-Element\-By\-Id}(\char`\"{}point\-\_\-annotation\-\_\-div\char`\"{});var elem2={\bf document.\-get\-Element\-By\-Id}(\char`\"{}point\-\_\-annotation\-\_\-edit\char`\"{});elem2.\-value=current\-\_\-point.\-annotation;elem.\-style.\-display=\char`\"{}block\char`\"{};elem.\-style.\-left=xstart+\char`\"{}px\char`\"{};elem.\-style.\-top=ystart+\char`\"{}px\char`\"{};elem.\-current\-\_\-point=current\-\_\-point;return;\}\}\}\}\}console.\-log(\char`\"{}Clicked the main canvas at (\char`\"{}+x+\char`\"{}, \char`\"{}+y+\char`\"{}).\char`\"{});if(audio.\-paused)\{audio.\-play();{\bf play\-\_\-pause\-\_\-time}=3;\}else\{audio.\-pause();{\bf play\-\_\-pause\-\_\-time}=3;\}\}\}}]{, }
+\item[{false}]{}
+\end{DoxyParamCaption}
+)}}\label{input_8js_a2591d0ef368c868ebb6dd7c04404ecfb}
+\hypertarget{input_8js_a0ac4b6e51f4163beb91e522c38920a02}{\index{input.\-js@{input.\-js}!delete\-\_\-point@{delete\-\_\-point}}
+\index{delete\-\_\-point@{delete\-\_\-point}!input.js@{input.\-js}}
+\subsubsection[{delete\-\_\-point}]{\setlength{\rightskip}{0pt plus 5cm}function delete\-\_\-point (
+\begin{DoxyParamCaption}
+\item[{}]{elem}
+\end{DoxyParamCaption}
+)}}\label{input_8js_a0ac4b6e51f4163beb91e522c38920a02}
+
+
+Definition at line 198 of file input.\-js.
+
+\hypertarget{input_8js_a4c560a8ffb4ec3cc33546ec5e4876227}{\index{input.\-js@{input.\-js}!get\-Element\-By\-Id@{get\-Element\-By\-Id}}
+\index{get\-Element\-By\-Id@{get\-Element\-By\-Id}!input.js@{input.\-js}}
+\subsubsection[{get\-Element\-By\-Id}]{\setlength{\rightskip}{0pt plus 5cm}document get\-Element\-By\-Id (
+\begin{DoxyParamCaption}
+\item[{}]{\char`\"{}point\-\_\-annotation\-\_\-edit\char`\"{}}
+\end{DoxyParamCaption}
+)}}\label{input_8js_a4c560a8ffb4ec3cc33546ec5e4876227}
+\hypertarget{input_8js_a82785636d1eb5b2b3575ae01b5a4dffc}{\index{input.\-js@{input.\-js}!point\-\_\-change\-\_\-color@{point\-\_\-change\-\_\-color}}
+\index{point\-\_\-change\-\_\-color@{point\-\_\-change\-\_\-color}!input.js@{input.\-js}}
+\subsubsection[{point\-\_\-change\-\_\-color}]{\setlength{\rightskip}{0pt plus 5cm}function point\-\_\-change\-\_\-color (
+\begin{DoxyParamCaption}
+\item[{}]{elem}
+\end{DoxyParamCaption}
+)}}\label{input_8js_a82785636d1eb5b2b3575ae01b5a4dffc}
+
+
+Definition at line 213 of file input.\-js.
+
+\hypertarget{input_8js_a8b9746072c98c25b9894f37fabc2e2cb}{\index{input.\-js@{input.\-js}!point\-\_\-change\-\_\-opacity@{point\-\_\-change\-\_\-opacity}}
+\index{point\-\_\-change\-\_\-opacity@{point\-\_\-change\-\_\-opacity}!input.js@{input.\-js}}
+\subsubsection[{point\-\_\-change\-\_\-opacity}]{\setlength{\rightskip}{0pt plus 5cm}function point\-\_\-change\-\_\-opacity (
+\begin{DoxyParamCaption}
+\item[{}]{elem}
+\end{DoxyParamCaption}
+)}}\label{input_8js_a8b9746072c98c25b9894f37fabc2e2cb}
+
+
+Definition at line 208 of file input.\-js.
+
+\hypertarget{input_8js_aa027faccc7604ccc940ce68ebaab80bd}{\index{input.\-js@{input.\-js}!point\-\_\-display\-\_\-options@{point\-\_\-display\-\_\-options}}
+\index{point\-\_\-display\-\_\-options@{point\-\_\-display\-\_\-options}!input.js@{input.\-js}}
+\subsubsection[{point\-\_\-display\-\_\-options}]{\setlength{\rightskip}{0pt plus 5cm}function point\-\_\-display\-\_\-options (
+\begin{DoxyParamCaption}
+\item[{}]{elem}
+\end{DoxyParamCaption}
+)}}\label{input_8js_aa027faccc7604ccc940ce68ebaab80bd}
+
+
+Definition at line 184 of file input.\-js.
+
+\hypertarget{input_8js_ae3d45000328a7a3cf05c97521a74bb63}{\index{input.\-js@{input.\-js}!point\-\_\-orientation@{point\-\_\-orientation}}
+\index{point\-\_\-orientation@{point\-\_\-orientation}!input.js@{input.\-js}}
+\subsubsection[{point\-\_\-orientation}]{\setlength{\rightskip}{0pt plus 5cm}function point\-\_\-orientation (
+\begin{DoxyParamCaption}
+\item[{}]{elem}
+\end{DoxyParamCaption}
+)}}\label{input_8js_ae3d45000328a7a3cf05c97521a74bb63}
+
+
+Definition at line 221 of file input.\-js.
+
+\hypertarget{input_8js_a37bc5f46598885d622fdc7acd2114593}{\index{input.\-js@{input.\-js}!point\-\_\-set\-\_\-lock@{point\-\_\-set\-\_\-lock}}
+\index{point\-\_\-set\-\_\-lock@{point\-\_\-set\-\_\-lock}!input.js@{input.\-js}}
+\subsubsection[{point\-\_\-set\-\_\-lock}]{\setlength{\rightskip}{0pt plus 5cm}function point\-\_\-set\-\_\-lock (
+\begin{DoxyParamCaption}
+\item[{}]{elem}
+\end{DoxyParamCaption}
+)}}\label{input_8js_a37bc5f46598885d622fdc7acd2114593}
+
+
+Definition at line 217 of file input.\-js.
+
+
+
+\subsection{Variable Documentation}
+\hypertarget{input_8js_a44496511cf798ffcd9ca0740253067c3}{\index{input.\-js@{input.\-js}!event@{event}}
+\index{event@{event}!input.js@{input.\-js}}
+\subsubsection[{event}]{\setlength{\rightskip}{0pt plus 5cm}function event}}\label{input_8js_a44496511cf798ffcd9ca0740253067c3}
+{\bfseries Initial value\-:}
+\begin{DoxyCode}
+\{
+    document.getElementById(\textcolor{stringliteral}{"point\_annotation\_div"}).current\_point.annotation = document.getElementById(\textcolor{stringliteral}{"
+      point\_annotation\_edit"}).value
+\end{DoxyCode}
+
+
+Definition at line 5 of file input.\-js.
+
