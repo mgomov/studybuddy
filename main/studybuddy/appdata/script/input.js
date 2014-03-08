@@ -73,6 +73,7 @@ image_canvas.addEventListener('click', function(event) {
 		editing_point = false;
 		dataToStore = JSON.stringify(master);
 		localStorage.setItem('Master Save', dataToStore);
+		// To load this file: var localData = JSON.parse(localStorage.getItem('Master Save'));
 		document.getElementById("point_annotation_div").style.display = "none";
 		document.getElementById("point_annotation_div").current_point = undefined;
 		return;
