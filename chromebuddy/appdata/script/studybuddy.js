@@ -95,6 +95,6 @@ window.addEventListener('resize', function(event){
  * 	\var
  */
 
-function change_volume(slider_vol/*!< Param for the volume */){
-	audio.volume = slider_vol / 100;
-}
+$("vol_slider").addEventListener("change", function(){
+	audio.volume = $("vol_slider").value / 100;
+});
