@@ -100,6 +100,7 @@ function add_point(x, y, ptannot){
 	apoint.y = y;
 	apoint.annotation = ptannot;
 	recording.Events[current_event].Points.push(apoint);
+	console.log(JSON.stringify(master));
 }
 
 
