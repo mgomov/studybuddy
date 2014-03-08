@@ -1,6 +1,15 @@
+
 /* input.js
  * Input-related handlers go here (e.g. click listeners, mouse movement listeners, etc)
  */
+
+$("file_merge").addEventListener('click', function(event){
+
+});
+
+$("file").addEventListener('click', function(event){
+	chrome.fileSystem.chooseEntry({type: 'openDirectory'}, load_file);
+});
  
 document.getElementById("point_annotation_edit").addEventListener('input', function(event){
 	document.getElementById("point_annotation_div").current_point.annotation = document.getElementById("point_annotation_edit").value;
@@ -181,7 +190,7 @@ image_canvas.addEventListener('contextmenu', function(event) {
 	add_point(x, y, "This is a default annotation\nwith multiple lines\n Click to edit");
 }, false);
 
-function point_display_options(elem){
+$("point_more_options").addEventListener('click', function(){
 	var elemdiv = document.getElementById("point_more_options_div");
 	var elemdiv2 = document.getElementById("point_annotation_div");
 	if(elemdiv.style.display == "none" || elemdiv.style.display == ""){
@@ -193,9 +202,9 @@ function point_display_options(elem){
 		elem.value = "More Options";
 		elemdiv.style.display = "none";
 	}
-}
+});
 
-function delete_point(elem){
+$("point_delete").addEventListener("click", function (){
 	for(var i = 0; i < recording.Events[current_event].Points.length; i++){
 		if(recording.Events[current_event].Points[i] === document.getElementById("point_annotation_div").current_point){
 			console.log("Deleted a point.");
@@ -203,21 +212,21 @@ function delete_point(elem){
 			elemdiv2 = document.getElementById("point_annotation_div").style.display = "none";
 		}
 	}
-}
+});
 
-function point_change_opacity(elem){
-	var opacity = elem.value / 100;
+$("point_opacity_slider").addEventListener("change", function(){
+	var opacity = $("point_change_opacity").value / 100;
 	document.getElementById("point_annotation_div").current_point.opacity = opacity;
-}
+});
 
-function point_change_color(elem){
-	document.getElementById("point_annotation_div").current_point.color = elem.value;
-}
+$("point_color_picker").addEventListener("change", function (){
+	document.getElementById("point_annotation_div").current_point.color = $("point_color_picker.value").value;
+});
 
-function point_set_lock(elem){
-	document.getElementById("point_annotation_div").current_point.locked = elem.checked;
-}
+$("point_lock").addEventListener("change", function (){
+	document.getElementById("point_annotation_div").current_point.locked = $("point_lock").checked;
+});
 
-function point_orientation(elem){
-	document.getElementById("point_annotation_div").current_point.orientation = elem.value;
-}
+$("point_orientation_select").addEventListener("change", function (){
+	document.getElementById("point_annotation_div").current_point.orientation = $("point_orientation_select").value;
+});

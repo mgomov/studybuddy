@@ -83,3 +83,7 @@ function roundedRect(ctx, x, y, width, height, radius, fill, stroke, tl, tr, bl,
 		ctx.fill();
 	}				
 }
+
+function $(elem){
+	return document.getElementById(elem);
+}

@@ -38,7 +38,17 @@ function get_event(time){
 function load_recording(elem){
 	console.log("LOADING INDEX " + elem.id);
 	recording = master.Recordings[elem.id];
-	audio.src = "data/" + recording.audio;
+	//audio.src = path + "data/" + recording.audio;
+	wd.getFile("data/" + recording.audio, function(athing){
+		console.log("1...");
+		console.log(athing);
+	}, function(entry){
+		console.log("2...");
+		entry.file(function(afile){
+			audio.src = webkitURL.createObjectURL(afile);
+		});
+	});
+	
 	elem.style.color = "#00ff00";	
 	audio.load();
 	current_event = -1;
@@ -52,9 +62,26 @@ function load_recording(elem){
 	}
 	
 	for(var i = 0; i < recording.Events.length; i++){
-		images[i].src = "data/" + recording.Events[i].image;
+		//images[i].src = path + "data/" + recording.Events[i].image;
+		load_image(i);
 	}
-	
+	console.log("IMAGES");
+	console.log(images);
+}
+
+function load_image(index){
+	wd.getFile("data/" + recording.Events[index].image, function(athing){
+		console.log("1...");
+		console.log(athing);
+	}, function(entry){
+		console.log("2...");
+		entry.file(function(afile){
+			images[index].src = webkitURL.createObjectURL(afile);
+			console.log("WEBKIT URL:");
+			console.log(webkitURL.createObjectURL(afile));
+			console.log(images[index].src);
+		});
+	});
 }
 
 function add_point(x, y, ptannot){

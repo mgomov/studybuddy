@@ -6,36 +6,36 @@
         <div id="left_menu_options">
 			<!--<input type="file" id="file2" onchange="load_parse_image(this)"></input>-->
 			<li>Merge files</li>
-			<input type="file" id="file_merge" onchange="pre_load_merge_files(this)" multiple></input>
+			<input type="button" id="file_merge"  multiple></input>
 			<input type="time" id="time_merge"></input>
 			<li>Volume</li>
-			<input id="vol_slider" type="range" min="1" max="100" value="50" onchange= "change_volume(this.value)"></input>
+			<input id="vol_slider" type="range" min="1" max="100" value="50"></input>
             <ul id="browser_list"><li>Choose a file below</li></ul>
-			<input type="file" id="file" onchange="load_file(this)"></input>
+			<input type="button" id="file"></input>
         </div>
 </nav>
 
 <div id = "point_annotation_div">
 	<a><textarea id="point_annotation_edit" ></textarea></a>
-	<input id="point_more_options" type="button" value="More Options" onclick="point_display_options(this)"></input>
-	<input id="point_delete" type="button" value="Delete Point" onclick="delete_point(this)"></input>
+	<input id="point_more_options" type="button" value="More Options"></input>
+	<input id="point_delete" type="button" value="Delete Point"></input>
 	<div id ="point_more_options_div">
-		<input id="point_opacity_slider" type="range" min="0" max ="100" value ="25" onchange = "point_change_opacity(this)"></input>
-		<select id="point_orientation_select" onchange ="point_orientation(this)">
+		<input id="point_opacity_slider" type="range" min="0" max ="100" value ="25"></input>
+		<select id="point_orientation_select">
 			<option value="0">Lower Right</option>
 			<option value="1">Upper Right</option>
 			<option value="2">Upper Left</option>
 			<option value="3">Lower Left</option>
 		</select>
-		<input type="color" id="point_color_picker" onchange="point_change_color(this)"></input>
-		<input type="checkbox" id="point_lock" onchange="point_set_lock(this)">Pin</input>
+		<input type="color" id="point_color_picker"></input>
+		<input type="checkbox" id="point_lock">Pin</input>
 	</div>
 </div>
 
 
 <div id="container">
 	<canvas id="image_canvas"></canvas>
-	<textarea id="point_annotation_edit" onchange="point_annotation()" current_point=""></textarea>
+	<textarea id="point_annotation_edit" current_point=""></textarea>
 </div>
 <canvas id="seek_canvas"></canvas>
 <canvas id="seek_overlay_canvas"></canvas>
@@ -46,14 +46,13 @@
                 <div><a id="movePoint">Move point</div>
 </div>
  
-<audio id="duration_source" src="" onloadeddata="on_aud_dur_load(this)"></audio>
+<audio id="duration_source" src="" ></audio>
  
-<script src="appdata/script/files.js"></script>
 <script src="appdata/script/utils.js"></script>
+<script src="appdata/script/files.js"></script>
 <script src="appdata/script/events.js"></script>
 <script src="appdata/script/render.js"></script>
 <script src="appdata/script/input.js"></script>
 <script src="appdata/script/studybuddy.js"></script>
  
 </html>
-

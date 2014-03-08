@@ -48,6 +48,10 @@ var seek_draw_x;  ///< What we're mousing over in terms of x coordinates
 var seek_display = false; ///< Boolean that tells us if we're moused over the seek bar or not
 
 var seek_display_opacity = 1.0; ///< Var for controlling transparency for fading of the seek bar
+
+var path = ""; ///< Var for the path of the main.sb's data
+
+var wd; ///< Working directory object; we have permissions to read & write here
 /*! \fn 	init
  * 	\brief 	Initializes the window width and heights properly.
  *  \brief  Called on startup and window resize.

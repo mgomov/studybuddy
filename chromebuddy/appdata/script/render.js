@@ -131,13 +131,15 @@ function draw_first_layer(){
 			// An event was switched, so some things need to happen e.g. loading
 			// annotations, images
 			if(event_switched){
+				main_image = images[current_event];
 				event_switched = false;
-				var an_image = new Image();	
-				an_image.onload=function(){
-					main_image = images[current_event];
-					image_updated = true;
-				}
-				an_image.src = "data/"+ recording.Events[current_event].image;
+				image_updated = true;
+				//var an_image = new Image();	
+				//an_image.onload=function(){
+					
+				//	image_updated = true;
+				//}
+				//an_image.src = path + "data/"+ recording.Events[current_event].image;
 			}
 			
 			// Drawing the image... If no boolean check, there's a small
@@ -154,7 +156,6 @@ function draw_first_layer(){
 	first_layer_render_preview();
 	
 	first_layer_render_playing();
-	
 }
 
 function first_layer_render_points(){

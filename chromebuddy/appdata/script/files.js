@@ -4,24 +4,39 @@
 
 // START of parsing a .sb file (e.g. main.sb)
 // Loads a file and parses its JSON into master variable
-function load_file(file){
-	// This is a pretty arbitrary process for loading a file in 
-	var reader = new FileReader();
-	var result;
-	master_file_reference = file;
-	// Onload for asynchronous functions (e.g. loading a file)
-	reader.onload = readSuccess;   
-    function readSuccess(evt) { 
-		result = evt.target.result;
-		parse_file(result);
-    };
-	recording_file = file.files[0];
-	reader.readAsText(file.files[0]);
+function load_file(dir, misc){
+	wd = dir;
+	console.log(dir);
+	dir.getFile("main.sb", 	function(athing){
+		console.log("1...");
+		console.log(athing);
+	}, function(entry){
+		console.log("2...");
+		console.log(entry);
+		entry.file(function(file){
+			// This is a pretty arbitrary process for loading a file in 
+			var reader = new FileReader();
+			var result;
+			//master_file_reference = file;
+			// Onload for asynchronous functions (e.g. loading a file)
+			reader.onload = readSuccess;   
+			function readSuccess(evt) { 
+				result = evt.target.result;
+				parse_file(result);
+			};
+			chrome.fileSystem.getDisplayPath(entry, function(apath) {
+				path = apath.replace("main.sb", "");
+			});
+			recording_file = file;
+			reader.readAsText(file);
+		});
+	});
 }
+
+$("file").addEventListener("change", load_file);
 
 // Does the JSON parsing and puts it into the recording
 function parse_file(result){
-	console.log(recording_file);
 	var jsonData = JSON.parse(result);
 	master = jsonData;
 	
@@ -74,7 +89,7 @@ function pre_load_merge_files(file){
 	// setTimeout(on_aud_dur_load(audpath),5000);
 	//on_aud_dur_load(aud);
 }
- 
+$("file_merge").addEventListener("change", pre_load_merge_files);
 // When audio is loaded, pass its duration to merge
 function on_aud_dur_load(aud){
         console.log("hello from on_aud_dur_load", aud.duration);
