@@ -40,6 +40,8 @@ var point_ctx = document.getElementById("point_context_menu"); ///< The editing 
 
 var _TEMPFILES;  ///< Temp var to pass files to main merge, DO NOT REFERENCE outside of merge process
 
+var dataToStore; ///< Variable that stores data to be saved after an annotation is created
+
 var images = new Array();  ///< Array of images for the current recording
 var seek_draw = false;  ///< Boolean telling us if we should be drawing the mouseover preview
 var seek_draw_event;  ///< The number of the event that we're previewing (in context of Recording[seek_draw_event])

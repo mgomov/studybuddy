@@ -71,6 +71,8 @@ image_canvas.addEventListener('mousedown', function(event) {
 image_canvas.addEventListener('click', function(event) {
 	if(editing_point){
 		editing_point = false;
+		dataToStore = JSON.stringify(master);
+		localStorage.setItem('Master Save', dataToStore);
 		document.getElementById("point_annotation_div").style.display = "none";
 		document.getElementById("point_annotation_div").current_point = undefined;
 		return;
