@@ -40,8 +40,6 @@ var point_ctx = document.getElementById("point_context_menu"); ///< The editing 
 
 var _TEMPFILES;  ///< Temp var to pass files to main merge, DO NOT REFERENCE outside of merge process
 
-var dataToStore; ///< Variable that stores data to be saved after an annotation is created
-
 var images = new Array();  ///< Array of images for the current recording
 var seek_draw = false;  ///< Boolean telling us if we should be drawing the mouseover preview
 var seek_draw_event;  ///< The number of the event that we're previewing (in context of Recording[seek_draw_event])
@@ -96,3 +94,47 @@ window.addEventListener('resize', function(event){
 function change_volume(slider_vol/*!< Param for the volume */){
 	audio.volume = slider_vol / 100;
 }
+
+// i added this below 
+
+
+//*******************************************
+// This blob method of saving files and donloading it isn't mine
+// I got the code online and only a small amount of it I changed
+function Download()
+{
+	var textToWrite = window.localStorage.ourfile;
+	
+	var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'});// puts your text into a blob
+	var fileNameToSaveAs =  document.getElementById("inputFileNameToSaveAs").value;
+	if( fileNameToSaveAs.length <= 0)
+	{
+		//console.log("Entered if statement");
+		 fileNameToSaveAs = "UserEnteredNoFileName";
+	}
+	fileNameToSaveAs += '.sb'
+	var downloadLink = document.createElement("a"); // creates a link to hold our download
+	downloadLink.download = fileNameToSaveAs; // calls built in download function to start download
+	downloadLink.innerHTML = "Download File";
+	if (window.webkitURL != null)
+	{
+		// Chrome allows the link to be clicked
+		// without actually adding it to the DOM.
+		downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+	}
+	else
+	{
+		// Firefox requires the link to be added to the DOM
+		// before it can be clicked.
+		downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+		downloadLink.onclick = destroyClickedElement;
+		downloadLink.style.display = "none";
+		document.body.appendChild(downloadLink);
+	}
+
+	downloadLink.click();
+
+}
+
+
+//*******************************************

@@ -71,11 +71,10 @@ image_canvas.addEventListener('mousedown', function(event) {
 image_canvas.addEventListener('click', function(event) {
 	if(editing_point){
 		editing_point = false;
-		dataToStore = JSON.stringify(master);
-		localStorage.setItem('Master Save', dataToStore);
-		// To load this file: var localData = JSON.parse(localStorage.getItem('Master Save'));
 		document.getElementById("point_annotation_div").style.display = "none";
 		document.getElementById("point_annotation_div").current_point = undefined;
+
+		window.localStorage.ourfile = JSON.stringify(master); //*********************************************************
 		return;
 	}
 	// Don't want to register a click if we just dragged (which js will do), so 
@@ -224,3 +223,23 @@ function point_set_lock(elem){
 function point_orientation(elem){
 	document.getElementById("point_annotation_div").current_point.orientation = elem.value;
 }
+
+
+// below this i added 
+
+function saveCanvas() {
+            window.localStorage.canvasImage = image_canvas.toDataURL(); // Save the user's drawing to persistent local storage.
+          } // saveCanvas
+  
+          function eraseCanvas() {
+            context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+          } // eraseCanvas
+           function loadCanvas() {
+            var img = new Image(); // The canvas drawImage() method expects an image object.
+            
+            img.src = window.localStorage.canvasImage; // Retrieve the last saved artistic achievement from persistent local storage.
+            img.onload = function() { // Only render the saved drawing when the image object has fully loaded the drawing into memory.
+               image_context.drawImage(img, 0, 0); // Draw the image starting at canvas coordinate (0, 0) - the upper left-hand corner of the canvas.
+            } // onload
+          } // loadCanvas
+ 

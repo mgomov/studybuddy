@@ -24,7 +24,8 @@ function parse_file(result){
 	console.log(recording_file);
 	var jsonData = JSON.parse(result);
 	master = jsonData;
-	
+	console.log(master);//************************************************
+	console.log(JSON.stringify(master));//************************************
 	var recording_list = document.getElementById("browser_list");
 	for(var i = 0; i < master.Recordings.length; i++){
 		var list_element = document.createElement("li");

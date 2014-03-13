@@ -73,9 +73,7 @@ function add_point(x, y, ptannot){
 	apoint.y = y;
 	apoint.annotation = ptannot;
 	recording.Events[current_event].Points.push(apoint);
-	dataToStore = JSON.stringify(master);
-	localStorage.setItem('Master Save', dataToStore);
-	// To load this file: var localData = JSON.parse(localStorage.getItem('Master Save'));
+	window.localStorage.ourfile = JSON.stringify(master); //***************************************************
 }
 
 
