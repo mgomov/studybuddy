@@ -116,6 +116,7 @@ function Download()
 	var downloadLink = document.createElement("a"); // creates a link to hold our download
 	downloadLink.download = fileNameToSaveAs; // calls built in download function to start download
 	downloadLink.innerHTML = "Download File";
+	
 	if (window.webkitURL != null)
 	{
 		// Chrome allows the link to be clicked

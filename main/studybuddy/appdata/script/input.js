@@ -146,8 +146,34 @@ image_canvas.addEventListener('click', function(event) {
 							elem2.value = current_point.annotation;
 							//elem.style.width = current_point.width;
 							elem.style.display = "block";
-							elem.style.left = xstart + "px";
-							elem.style.top = ystart + "px";
+							console.log(image_canvas.width)
+							console.log(current_point.width)
+							if (xstart < image_canvas.width/2 && ystart < image_canvas.height/2)
+							{
+						//		console.log("Quadrant 1")
+								elem.style.left = xstart + "px";
+								elem.style.top = ystart + "px";
+							}
+							else if(xstart < image_canvas.width/2 && ystart >= image_canvas.height/2)
+							{
+						//		console.log("Quadrant 2")
+								elem.style.left = xstart + "px";
+								elem.style.top = ystart-270 + "px";	
+							}
+
+							else if(xstart >= image_canvas.width/2 && ystart < image_canvas.height/2)
+							{
+					//			console.log("Quadrant 3")
+								elem.style.left = xstart-410 + "px";
+								elem.style.top = ystart + "px";	
+							}
+							else
+							{
+					//			console.log("Quadrant 4")
+								elem.style.left = xstart-410 + "px";
+								elem.style.top = ystart-270 + "px";	
+							}
+							
 							elem.current_point = current_point;
 							return; 
 						}
